@@ -2,6 +2,7 @@ package edu.uw.ischool.mwoode.filmtrackers
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import edu.uw.ischool.mwoode.filmtrackers.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

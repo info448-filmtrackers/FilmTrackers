@@ -1,0 +1,3 @@
+package edu.uw.ischool.mwoode.filmtrackers
+
+const val BEARER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2Y2JmOTRjY2RmNzM2Y2JhNmI4NjM2MGI5NTYwZjQ0MiIsInN1YiI6IjY1NjY3ZDkyNmMwYjM2MDBjNzQ1OTVmNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3OXy8lCU6T9Fl6AIvrSEPgGVtetETGqYItUuXYKcUJE"

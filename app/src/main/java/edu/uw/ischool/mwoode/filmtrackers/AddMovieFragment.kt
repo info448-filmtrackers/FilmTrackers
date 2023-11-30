@@ -1,15 +1,25 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+import javax.net.ssl.HttpsURLConnection
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
+private const val TAG = "AddMovieFragment"
 
 /**
  * A simple [Fragment] subclass.
@@ -26,6 +36,20 @@ class AddMovieFragment : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+        }
+
+        val executor: Executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url(getString(R.string.movie_details_url, 199)) // just replace 2nd number with movieid
+                .get()
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+                .build()
+
+            val response = client.newCall(request).execute()
+            Log.i(TAG, "response: ${response.body()?.string()}")
         }
     }
 

@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="380dp"
-    android:layout_height="160dp"
+    android:layout_height="180dp"
     android:paddingVertical="10dp">
 
     <ImageView
         android:id="@+id/movieImg"
-        android:layout_width="100dp"
-        android:layout_height="140dp"
+        android:layout_width="120dp"
+        android:layout_height="160dp"
         android:layout_marginRight="10dp"
         android:src="@drawable/placeholder_movie" />
 
@@ -39,7 +39,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+            android:text="Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+
+        <Button
+            android:id="@+id/readMoreBtn"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="Read More"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 </LinearLayout>

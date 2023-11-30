@@ -8,7 +8,6 @@
     android:paddingRight="10dp"
     android:paddingTop="60dp"
     tools:context=".HomePageFragment">
-
     <TextView
         android:id="@+id/movieTitle"
         android:layout_width="match_parent"
@@ -18,43 +17,45 @@
         android:gravity="center"
         android:textAlignment="center"
         android:textSize="20dp" />
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="10dp">
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
+        android:layout_marginTop="30dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="10dp">
 
-            <include layout="@layout/fragment_homepage_option" />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout2">
+                <include layout="@layout/fragment_homepage_option" />
+            </LinearLayout>
 
-            <include layout="@layout/fragment_homepage_option" />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout2">
 
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout3">
+                <include layout="@layout/fragment_homepage_option" />
+            </LinearLayout>
 
-            <include layout="@layout/fragment_homepage_option" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout3">
 
-
+                <include layout="@layout/fragment_homepage_option" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </FrameLayout>

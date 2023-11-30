@@ -12,15 +12,17 @@
         android:id="@+id/movieTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         android:text="FilmTrackers"
+        android:textFontWeight="600"
+        android:fontFamily="@font/unbounded"
         android:gravity="center"
         android:textAlignment="center"
-        android:textSize="20dp" />
+        android:textSize="25dp" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="40dp">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

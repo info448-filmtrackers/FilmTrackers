@@ -1,6 +1,7 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -50,16 +51,17 @@ class AddMovieFragment : Fragment() {
 
     private fun updateMovieCard(movieId: Int) {
         // TODO: will complete checks for internet connectivity later
-//        if (!isOnline()) {
-//            Toast.makeText(
-//                activity,
-//                "You are currently offline and you have no access to the internet. Please check your connection.",
-//                Toast.LENGTH_LONG).show()
-//        } else {
+        if (!isOnline()) {
+            Toast.makeText(
+                activity,
+                "You are currently offline and you have no access to the internet. Please check your connection.",
+                Toast.LENGTH_LONG).show()
+        } else {
             val executor: Executor = Executors.newSingleThreadExecutor()
-            var movieData: JSONObject
             executor.execute {
                 val client = OkHttpClient()
+
+                // get the movie data
                 val movieDataRequest = Request.Builder()
                     .url(
                         getString(
@@ -73,26 +75,29 @@ class AddMovieFragment : Fragment() {
                     .build()
 
                 val movieDataResponse = client.newCall(movieDataRequest).execute()
-                movieData = JSONObject(movieDataResponse.body()?.string())
+                val movieData = JSONObject(movieDataResponse.body()?.string())
                 Log.i(TAG, "response: $movieData")
 
-                // TODO: figure out how to get the image
-//            val movieImgRequest = Request.Builder()
-//                .url("$IMG_BASE_URL/${movieData.poster_path}") // just replace 2nd number with movieid
-//                .get()
-//                .addHeader("accept", "application/json")
-//                .addHeader("Authorization", "Bearer $BEARER_TOKEN")
-//                .build()
+                // get the image
+                val movieImgRequest = Request.Builder()
+                    .url("$IMG_BASE_URL/${movieData["poster_path"]}") // just replace 2nd number with movieid
+                    .get()
+                    .addHeader("accept", "application/json")
+                    .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+                    .build()
+
+                val movieImgResponse = client.newCall(movieImgRequest).execute()
+                val bitmap = BitmapFactory.decodeStream(movieImgResponse.body()?.source()?.inputStream())
 
                 val rating = (movieData["vote_average"] as Double).toInt()
-
                 activity?.runOnUiThread {
                     movieCardTitleTextView.text = movieData["title"].toString()
                     movieCardRatingTextView.text = "$rating/10"
-                    movieCardDescTextView.text = movieData["overview"].toString()
+                    movieCardDescTextView.text = movieData["tagline"].toString()
+                    movieCardImageView.setImageBitmap(bitmap)
                 }
             }
-//        }
+        }
     }
 
     override fun onCreateView(
@@ -115,16 +120,14 @@ class AddMovieFragment : Fragment() {
         return view
     }
 
-    // TODO: will complete checks for internet connectivity later
-//    private fun isOnline(): Boolean {
-//        val context = activity as Context
-//        val connectivityManager = activity.getSystemService(context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-//        val activeNetwork = connectivityManager?.activeNetwork
-//        val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
-//        val isOnline = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
-//        Log.i(TAG, "MainActivity: Is this device is online? $isOnline")
-//        return isOnline
-//    }
+    private fun isOnline(): Boolean {
+        val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val activeNetwork = connectivityManager?.activeNetwork
+        val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
+        val isOnline = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+        Log.i(TAG, "MainActivity: Is this device is online? $isOnline")
+        return isOnline
+    }
 
     companion object {
         /**

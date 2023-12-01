@@ -6,6 +6,8 @@
     android:layout_height="180dp"
     android:paddingVertical="10dp">
 
+    <!--  Made up of placeholder data, need to populate with actual data from the API  -->
+
     <ImageView
         android:id="@+id/movieImg"
         android:layout_width="120dp"

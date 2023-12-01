@@ -63,12 +63,7 @@ class AddMovieFragment : Fragment() {
 
                 // get the movie data
                 val movieDataRequest = Request.Builder()
-                    .url(
-                        getString(
-                            R.string.movie_details_url,
-                            movieId
-                        )
-                    ) // just replace 2nd number with movieid
+                    .url(getString(R.string.movie_details_url, movieId))
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", "Bearer $BEARER_TOKEN")
@@ -80,7 +75,7 @@ class AddMovieFragment : Fragment() {
 
                 // get the image
                 val movieImgRequest = Request.Builder()
-                    .url("$IMG_BASE_URL/${movieData["poster_path"]}") // just replace 2nd number with movieid
+                    .url("$IMG_BASE_URL/${movieData["poster_path"]}")
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", "Bearer $BEARER_TOKEN")

@@ -1,18 +1,22 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.net.HttpURLConnection
-import java.net.URL
+import org.json.JSONObject
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-import javax.net.ssl.HttpsURLConnection
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,35 +35,96 @@ class AddMovieFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var movieCardImageView: ImageView
+    private lateinit var movieCardTitleTextView: TextView
+    private lateinit var movieCardRatingTextView: TextView
+    private lateinit var movieCardDescTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+    }
 
-        val executor: Executor = Executors.newSingleThreadExecutor()
-        executor.execute {
-            val client = OkHttpClient()
-            val request = Request.Builder()
-                .url(getString(R.string.movie_details_url, 199)) // just replace 2nd number with movieid
-                .get()
-                .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Bearer $BEARER_TOKEN")
-                .build()
+    private fun updateMovieCard(movieId: Int) {
+        // TODO: will complete checks for internet connectivity later
+//        if (!isOnline()) {
+//            Toast.makeText(
+//                activity,
+//                "You are currently offline and you have no access to the internet. Please check your connection.",
+//                Toast.LENGTH_LONG).show()
+//        } else {
+            val executor: Executor = Executors.newSingleThreadExecutor()
+            var movieData: JSONObject
+            executor.execute {
+                val client = OkHttpClient()
+                val movieDataRequest = Request.Builder()
+                    .url(
+                        getString(
+                            R.string.movie_details_url,
+                            movieId
+                        )
+                    ) // just replace 2nd number with movieid
+                    .get()
+                    .addHeader("accept", "application/json")
+                    .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+                    .build()
 
-            val response = client.newCall(request).execute()
-            Log.i(TAG, "response: ${response.body()?.string()}")
-        }
+                val movieDataResponse = client.newCall(movieDataRequest).execute()
+                movieData = JSONObject(movieDataResponse.body()?.string())
+                Log.i(TAG, "response: $movieData")
+
+                // TODO: figure out how to get the image
+//            val movieImgRequest = Request.Builder()
+//                .url("$IMG_BASE_URL/${movieData.poster_path}") // just replace 2nd number with movieid
+//                .get()
+//                .addHeader("accept", "application/json")
+//                .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+//                .build()
+
+                val rating = (movieData["vote_average"] as Double).toInt()
+
+                activity?.runOnUiThread {
+                    movieCardTitleTextView.text = movieData["title"].toString()
+                    movieCardRatingTextView.text = "$rating/10"
+                    movieCardDescTextView.text = movieData["overview"].toString()
+                }
+            }
+//        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_add_movie, container, false)
+
+        movieCardImageView = view?.findViewById(R.id.movieImg) as ImageView
+        movieCardTitleTextView = view.findViewById(R.id.movieTitle) as TextView
+        movieCardRatingTextView = view.findViewById(R.id.movieRating) as TextView
+        movieCardDescTextView = view.findViewById(R.id.movieDescription) as TextView
+
+        // movieId will be passed in from the search page...
+        // alternatively, the search page can just pass the movie data in an intent extra to avoid doing another API call
+        val movieId = 199
+        updateMovieCard(movieId)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_movie, container, false)
+        return view
     }
+
+    // TODO: will complete checks for internet connectivity later
+//    private fun isOnline(): Boolean {
+//        val context = activity as Context
+//        val connectivityManager = activity.getSystemService(context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+//        val activeNetwork = connectivityManager?.activeNetwork
+//        val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
+//        val isOnline = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+//        Log.i(TAG, "MainActivity: Is this device is online? $isOnline")
+//        return isOnline
+//    }
 
     companion object {
         /**

@@ -74,7 +74,7 @@ class DetailedFragment : Fragment() {
         movieActors = view.findViewById(R.id.detailActor) as TextView
         movieSummary = view.findViewById(R.id.detailSummary) as TextView
 
-        val movieId = 657
+        val movieId = 200
         updateMovie(movieId)
 
         return view
@@ -213,7 +213,7 @@ class DetailedFragment : Fragment() {
                 movieRating.text = "Rating: $rating/10"
                 movieDate.text = "Release Date: " + movieData["release_date"].toString()
                 movieGenre.text = "Genre: $genreList"
-                movieCompany.text = "Prod. Company:\n $companyList"
+                movieCompany.text = "Prod. Company: $companyList"
                 movieDirector.text = "Director: $directorList"
                 movieWriter.text = "Writer: $writerList"
                 movieProducer.text = "Producer: $producerList"

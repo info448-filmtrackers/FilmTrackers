@@ -13,37 +13,37 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
         android:text="Title: "
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/detailRating"
         android:layout_width="210dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:layout_gravity="right|center_horizontal"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:text="Rating: "
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/detailDate"
         android:layout_width="210dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:layout_gravity="right|center_horizontal"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="75dp"
         android:layout_marginEnd="20dp"
         android:text="Release Date: "
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/detailGenre"
         android:layout_width="210dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_gravity="right|center_horizontal"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="20dp"
         android:text="Genre: "
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <ImageView
         android:id="@+id/moviePoster"
@@ -57,61 +57,64 @@
     <TextView
         android:id="@+id/detailDirector"
         android:layout_width="372dp"
-        android:layout_height="25dp"
+        android:layout_height="20dp"
         android:layout_gravity="center|top"
         android:layout_marginTop="220dp"
         android:text="Director: "
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/detailWriter"
         android:layout_width="372dp"
-        android:layout_height="25dp"
+        android:layout_height="20dp"
         android:layout_gravity="center|top"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="245dp"
         android:text="Writer: "
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/detailProducer"
         android:layout_width="372dp"
         android:layout_height="35dp"
         android:layout_gravity="center|top"
-        android:layout_marginTop="280dp"
-        android:text="Producer: " />
+        android:layout_marginTop="270dp"
+        android:text="Producer: "
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/detailEditor"
         android:layout_width="372dp"
         android:layout_height="35dp"
         android:layout_gravity="center|top"
-        android:layout_marginTop="320dp"
-        android:text="Editor: " />
+        android:layout_marginTop="310dp"
+        android:text="Editor: "
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/detailActor"
         android:layout_width="372dp"
-        android:layout_height="85dp"
+        android:layout_height="80dp"
         android:layout_gravity="center|top"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="350dp"
         android:text="Actors: "
         android:textSize="13sp" />
 
     <TextView
         android:id="@+id/detailCompany"
         android:layout_width="210dp"
-        android:layout_height="50dp"
+        android:layout_height="80dp"
         android:layout_gravity="right|top"
-        android:layout_marginTop="165dp"
+        android:layout_marginTop="135dp"
         android:layout_marginEnd="20dp"
-        android:text="Production Company: " />
+        android:text="Production Company: "
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/detailSummary"
         android:layout_width="372dp"
-        android:layout_height="150dp"
+        android:layout_height="171dp"
         android:layout_gravity="center|top"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="435dp"
         android:text="Summary: "
         android:textSize="13sp" />
 

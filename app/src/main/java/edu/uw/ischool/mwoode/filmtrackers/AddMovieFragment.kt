@@ -141,7 +141,6 @@ class AddMovieFragment : Fragment() {
             executor.execute {
                 val client = OkHttpClient()
 
-                Log.i(TAG, "movie ID param: $movieIdParam")
                 // get the movie data
                 val movieDataRequest = Request.Builder()
                     .url(getString(R.string.movie_details_url, movieIdParam))
@@ -196,6 +195,7 @@ class AddMovieFragment : Fragment() {
         val reviewJson = UserReview(movieIdParam, userLikedMovie.toBoolean(), dateWatched, userReviewEditText.text.toString())
 
         val filePath = "${context?.filesDir?.absolutePath}/$USER_DATA_FILE"
+        Log.i(TAG, "filePath: $filePath")
         ensureUserDataFileExists(filePath)
 
         var userReviews: MutableList<UserReview>
@@ -227,7 +227,6 @@ class AddMovieFragment : Fragment() {
         val activeNetwork = connectivityManager?.activeNetwork
         val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
         val isOnline = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
-        Log.i(TAG, "MainActivity: Is this device is online? $isOnline")
         return isOnline
     }
 

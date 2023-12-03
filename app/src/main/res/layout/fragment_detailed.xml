@@ -47,12 +47,11 @@
 
     <ImageView
         android:id="@+id/moviePoster"
-        android:layout_width="150dp"
+        android:layout_width="140dp"
         android:layout_height="200dp"
         android:layout_marginVertical="15dp"
-        android:layout_marginStart="20dp"
-        android:contentDescription="TODO"
-        android:src="@drawable/placeholder_movie" />
+        android:layout_marginStart="35dp"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/detailDirector"

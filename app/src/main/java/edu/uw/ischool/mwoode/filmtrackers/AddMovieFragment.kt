@@ -30,10 +30,7 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 private const val MOVIE_ID_PARAM = "movieIdParam"
-
 private const val TAG = "AddMovieFragment"
-
-data class UserReview(var movieId: Int, var liked: Boolean, var dateWatched: String, var review: String)
 
 class AddMovieFragment : Fragment() {
     private var movieIdParam = -1

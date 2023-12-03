@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -16,11 +15,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include
-            layout="@layout/fragment_movie_card"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp" />
+
+<!--        <include-->
+<!--            android:id="@+id/movieCardFragment"-->
+<!--            layout="@layout/fragment_movie_card"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="10dp" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,27 +34,32 @@
             android:layout_marginVertical="10dp"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/thumbsUpBtn"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="5dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_corner"
-                android:contentDescription="Thumbs up"
-                android:padding="5dp"
-                android:src="@drawable/like" />
+                android:text="Did you like the movie?"
+                android:layout_gravity="center"
+                android:textSize="18dp"
+                android:layout_marginRight="10dp"/>
 
-            <ImageButton
-                android:id="@+id/thumbsDownBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_corner"
-                android:contentDescription="Thumbs down"
-                android:padding="5dp"
-                android:src="@drawable/dislike" />
+            <ToggleButton
+                android:id="@+id/thumbsUpToggle"
+                android:layout_width="75dp"
+                android:layout_height="60dp"
+                android:drawableTop="@drawable/like_unselected"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@+id/thumbsDownToggle"
+                android:layout_width="75dp"
+                android:layout_height="60dp"
+                android:drawableTop="@drawable/dislike_unselected"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
 
         </LinearLayout>
 
@@ -59,7 +70,10 @@
             android:layout_height="50dp"
             android:ems="10"
             android:hint="Date Watched"
-            android:inputType="date" />
+            android:inputType="date"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="true" />
 
         <EditText
             android:id="@+id/userReviewEditText"
@@ -72,7 +86,7 @@
             android:inputType="textMultiLine" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/addMovieBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

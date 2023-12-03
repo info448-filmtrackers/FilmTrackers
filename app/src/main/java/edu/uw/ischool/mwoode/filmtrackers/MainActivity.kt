@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.io.File
+import java.io.FileWriter
 
 //import edu.uw.ischool.mwoode.filmtrackers.databinding.ActivityMainBinding
 
@@ -34,12 +36,24 @@ class MainActivity : AppCompatActivity() {
 
         val test = supportFragmentManager.findFragmentByTag("fragment_homepage_option")
         Log.i("INFO", test.toString())
+
+        setupUserDataFile()
     }
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout, fragment);
             commit();
+        }
+    }
+
+    private fun setupUserDataFile() {
+        val filePath = "${this.filesDir?.absolutePath}/$USER_DATA_FILE"
+        val file = File(filePath)
+        if (!file.exists()) {
+            val fileWriter = FileWriter(filePath)
+            fileWriter.write("[]")
+            fileWriter.close()
         }
     }
 }

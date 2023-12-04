@@ -124,18 +124,12 @@ class DetailedFragment : Fragment() {
             val genreList = arrayListOf<String>()
             val companyList = arrayListOf<String>()
 
-
             val castList = arrayListOf<String>()
-            //val crewList = arrayListOf<String>()
-
             val directorList = arrayListOf<String>()
             val writerList = arrayListOf<String>()
             val producerList = arrayListOf<String>()
             val editorList = arrayListOf<String>()
 
-            /*for (i in 0 until genre.length()) {
-                genreList.add(genre[i].toString())
-            }*/
 
             for (i in 0 until genre.length()) {
                 val genres = genre.getJSONObject(i)
@@ -149,50 +143,21 @@ class DetailedFragment : Fragment() {
                 companyList.add(companyName)
             }
 
-            /*for (i in 0 until cast.length()) {
-                val castMember = cast.getJSONObject(i)
-                val actorName = castMember.getString("name")
-                castList.add(actorName)
-                //castList.add(cast[i].toString())
-            }*/
-
             for (i in 0 until 15) {
                 val castMember = cast.getJSONObject(i)
                 val actorName = castMember.getString("name")
                 castList.add(actorName)
-                //castList.add(cast[i].toString())
             }
 
             for (i in 0 until crew.length()) {
                 val crewMember = crew.getJSONObject(i)
 
-                //val crewJob = crewMember.getString("job")
-
-                /*
-                val directorList = arrayListOf<String>()
-                val writerList = arrayListOf<String>()
-                val producerList = arrayListOf<String>()
-                val editorList = arrayListOf<String>()
-                 */
-
-                // when(crewJob) {
                 when(crewMember.getString("job")) {
                     "Director" -> directorList.add(crewMember.getString("name"))
                     "Screenplay" -> writerList.add(crewMember.getString("name"))
                     "Producer" -> producerList.add(crewMember.getString("name"))
                     "Editor" -> editorList.add(crewMember.getString("name"))
                 }
-
-                /*
-                val director = crewMember.getString("job") == "Director"
-                val writer = crewMember.getString("job") == "Writer"
-                val producer = crewMember.getString("job") == "Producer"
-                val editor = crewMember.getString("job") == "Editor"
-                */
-
-                //crewList.add(director)
-
-                //crewList.add(cast[i].toString())
             }
 
             activity?.runOnUiThread {
@@ -200,13 +165,13 @@ class DetailedFragment : Fragment() {
                 movieTitle.text = movieData["title"].toString()
                 movieRating.text = "Rating: $rating/10"
                 movieDate.text = "Release Date: " + movieData["release_date"].toString()
-                movieGenre.text = "Genre: $genreList"
-                movieCompany.text = "Prod. Company: $companyList"
-                movieDirector.text = "Director: $directorList"
-                movieWriter.text = "Writer: $writerList"
-                movieProducer.text = "Producer: $producerList"
-                movieEditor.text = "Editor: $editorList"
-                movieActors.text = "Actors: $castList"
+                movieGenre.text = "Genre: " + genreList.toString().replace("[", "").replace("]", "")
+                movieCompany.text = "Prod. Company: " + companyList.toString().replace("[", "").replace("]", "")
+                movieDirector.text = "Director: " + directorList.toString().replace("[", "").replace("]", "")
+                movieWriter.text = "Writer: " + writerList.toString().replace("[", "").replace("]", "")
+                movieProducer.text = "Producer: " + producerList.toString().replace("[", "").replace("]", "")
+                movieEditor.text = "Editor: " + editorList.toString().replace("[", "").replace("]", "")
+                movieActors.text = "Actors: " + castList.toString().replace("[", "").replace("]", "")
                 movieSummary.text = "Summary:\n" + movieData["overview"].toString()
             }
         }

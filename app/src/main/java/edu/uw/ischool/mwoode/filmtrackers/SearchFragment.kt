@@ -1,16 +1,25 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONArray
+import org.json.JSONObject
+import java.util.Timer
+import java.util.TimerTask
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -26,18 +35,15 @@ private const val ARG_PARAM2 = "param2"
  */
 class SearchFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    private var searchInProg: Request? = null
+    private var tasksShown: Boolean = false
+    private var searchInProg: TimerTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-
+//        arguments?.let {
+//            param1 = it.getString(ARG_PARAM1)
+//            param2 = it.getString(ARG_PARAM2)
+//        }
     }
 
     // Searches tmdb for matches
@@ -45,20 +51,44 @@ class SearchFragment : Fragment() {
         val executor: Executor = Executors.newSingleThreadExecutor()
         executor.execute {
             val client = OkHttpClient()
-            // CANCEL IF SEARCH IN PROGRESS
-//            if (searchInProg !== null) {
-//                searchInProg.cancel()
-//            }
 
-            searchInProg = Request.Builder()
+            val request = Request.Builder()
                 .url(getString(R.string.search_url, query)) // args: search query
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer $BEARER_TOKEN")
                 .build()
 
-            val response = client.newCall(searchInProg).execute()
-            Log.i("SEARCH", "response: ${response.body()?.string()}")
+            val response = client.newCall(request).execute()
+            val check = JSONObject(response.body()?.string())["results"]
+            displaySearchResults(JSONArray(check.toString()))
+        }
+    }
+
+    fun displaySearchResults(searchResults: JSONArray) {
+        Log.i("SEARCH", searchResults.toString())
+
+        activity?.runOnUiThread {
+            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
+        }
+
+        for (i in 0 until searchResults.length()) {
+            val movieData = searchResults.getJSONObject(i)
+            val backdropPath = movieData.getString("poster_path")
+
+            val movieDataFragment = SearchResult.newInstance(
+                movieData.getString("title"),
+                movieData.getString("overview"),
+                movieData.getDouble("vote_average"),
+                IMG_BASE_URL + backdropPath
+            )
+
+            val fragmentManager = childFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.add(R.id.searchResultsHolder, movieDataFragment)
+
+            // Commit the transaction
+            transaction.commit()
         }
     }
 
@@ -66,8 +96,12 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val timer = Timer()
+
         val root = inflater.inflate(R.layout.fragment_search, container, false);
+        // search functionality
         val searchInput = root.findViewById<EditText>(R.id.searchBar)
+
         searchInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
@@ -77,10 +111,38 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchTerm = s.toString()
-                search(searchTerm)
+                searchInProg?.cancel()
+                searchInProg = object : TimerTask() {
+                    override fun run() {
+                        search(searchTerm)
+                    }
+                }
+
+                timer.schedule(searchInProg, 2000)
             }
         })
+
+        // open filters functionality
+        val filterButton = root.findViewById<RelativeLayout>(R.id.filterHolder)
+        filterButton.setOnClickListener {
+            toggleFilters()
+        }
+
         return root;
+    }
+
+    private fun toggleFilters() {
+
+        activity?.runOnUiThread {
+            val buttonText = view?.findViewById<TextView>(R.id.filtersText)
+            if (tasksShown) {
+                buttonText?.setText("Filters ▼")
+            } else {
+                buttonText?.setText("Filters ►")
+            }
+        }
+
+        tasksShown = !tasksShown
     }
 
     companion object {

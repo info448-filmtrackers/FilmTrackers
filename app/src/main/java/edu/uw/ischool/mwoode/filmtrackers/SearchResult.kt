@@ -1,15 +1,24 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val TITLE = "originalTitle"
+private const val DESC = "description"
+private const val RATING = "rating"
+private const val IMG = "imgUrl"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,25 +27,63 @@ private const val ARG_PARAM2 = "param2"
  */
 class SearchResult : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var originalTitle: String? = null
+    private var description: String? = null
+    private var rating: Double? = null
+    private var imgUrl: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            originalTitle = it.getString(TITLE)
+            description = it.getString(DESC)
+            rating = it.getDouble(RATING)
+            imgUrl = it.getString(IMG)
         }
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_result, container, false)
+        val view = inflater.inflate(R.layout.fragment_search_result, container, false)
+
+        val titleTextView = view.findViewById<TextView>(R.id.movieTitle)
+        titleTextView.text = originalTitle
+
+        val ratingTextView = view.findViewById<TextView>(R.id.movieRating)
+        ratingTextView.text = "$rating/10"
+
+        val descriptionTextView = view.findViewById<TextView>(R.id.movieDescription)
+        descriptionTextView.text = description
+
+        Log.i("IMG", imgUrl.toString())
+        if (imgUrl != null) {
+            val executor: Executor = Executors.newSingleThreadExecutor()
+            executor.execute {
+                try {
+                    val client = OkHttpClient()
+                    val movieImgRequest = Request.Builder()
+                        .url(imgUrl)
+                        .get()
+                        .addHeader("accept", "application/json")
+                        .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+                        .build()
+
+                    val movieImgResponse = client.newCall(movieImgRequest).execute()
+                    val bitmap = BitmapFactory.decodeStream(movieImgResponse.body()?.source()?.inputStream())
+
+                    // fetch the img to display
+                    val imagePoster = view.findViewById<ImageView>(R.id.movieImg)
+                    imagePoster.setImageBitmap(bitmap)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        return view
     }
 
     companion object {
@@ -50,11 +97,17 @@ class SearchResult : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(
+            title: String,
+            description: String,
+            rating: Double,
+            imgUrl: String) =
             SearchResult().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(TITLE, title)
+                    putString(DESC, description)
+                    putDouble(RATING, rating)
+                    putString(IMG, imgUrl)
                 }
             }
     }

@@ -65,12 +65,14 @@ class AddMovieFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val newMovieCardFragment = MovieCardFragment()
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, newMovieCardFragment)
-            .addToBackStack(null)
-            .hide(newMovieCardFragment)
-            .commit()
+        if (isAdded) {
+            val newMovieCardFragment = MovieCardFragment()
+            childFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, newMovieCardFragment)
+                .addToBackStack(null)
+                .hide(newMovieCardFragment)
+                .commit()
+        }
 
         thumbsUpToggle = view.findViewById(R.id.thumbsUpToggle) as ToggleButton
         thumbsDownToggle = view.findViewById(R.id.thumbsDownToggle) as ToggleButton
@@ -119,7 +121,7 @@ class AddMovieFragment : Fragment() {
         }
 
         addMovieBtn.setOnClickListener {
-            if (userLikedMovie.isEmpty() || dateWatched.isNullOrEmpty() || userReviewEditText.text.isNullOrEmpty()) {
+            if (userLikedMovie.isEmpty() || dateWatched.isEmpty() || userReviewEditText.text.isNullOrEmpty()) {
                 Toast.makeText(activity, "Make sure all required fields are filled.", Toast.LENGTH_LONG).show()
             } else {
                 saveUserReview()
@@ -166,28 +168,35 @@ class AddMovieFragment : Fragment() {
 
                 val rating = (movieData["vote_average"] as Double).toInt()
                 activity?.runOnUiThread {
-                    movieCardFragment = childFragmentManager.findFragmentById(R.id.fragmentContainerView) as MovieCardFragment
-                    movieCardFragment?.let {
-                        val movieCardTitleTextView = it.view?.findViewById(R.id.movieTitle) as TextView
-                        val movieCardRatingTextView = it.view?.findViewById(R.id.movieRating) as TextView
-                        val movieCardDescTextView = it.view?.findViewById(R.id.movieDescription) as TextView
-                        val movieCardImageView = it.view?.findViewById(R.id.movieImg) as ImageView
-                        val readMoreBtn = it.view?.findViewById(R.id.readMoreBtn) as Button
+                    if (isAdded) {
+                        movieCardFragment =
+                            childFragmentManager.findFragmentById(R.id.fragmentContainerView) as MovieCardFragment
+                        movieCardFragment?.let {
+                            val movieCardTitleTextView =
+                                it.view?.findViewById(R.id.movieTitle) as TextView
+                            val movieCardRatingTextView =
+                                it.view?.findViewById(R.id.movieRating) as TextView
+                            val movieCardDescTextView =
+                                it.view?.findViewById(R.id.movieDescription) as TextView
+                            val movieCardImageView =
+                                it.view?.findViewById(R.id.movieImg) as ImageView
+                            val readMoreBtn = it.view?.findViewById(R.id.readMoreBtn) as Button
 
-                        movieCardTitleTextView.text = movieData["title"].toString()
-                        movieCardRatingTextView.text = "Rating: $rating/10"
-                        movieCardDescTextView.text = movieData["tagline"].toString()
-                        movieCardImageView.setImageBitmap(bitmap)
-                        readMoreBtn.setOnClickListener {
-                            val detailedFragment = DetailedFragment.newInstance(movieIdParam)
-                            navigateToFragment(detailedFragment)
+                            movieCardTitleTextView.text = movieData["title"].toString()
+                            movieCardRatingTextView.text = "Rating: $rating/10"
+                            movieCardDescTextView.text = movieData["tagline"].toString()
+                            movieCardImageView.setImageBitmap(bitmap)
+                            readMoreBtn.setOnClickListener {
+                                val detailedFragment = DetailedFragment.newInstance(movieIdParam)
+                                navigateToFragment(detailedFragment)
+                            }
                         }
-                    }
 
-                    childFragmentManager.beginTransaction()
-                        .show(movieCardFragment)
-                        .addToBackStack(null)
-                        .commit()
+                        childFragmentManager.beginTransaction()
+                            .show(movieCardFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
             }
         }
@@ -225,11 +234,11 @@ class AddMovieFragment : Fragment() {
     }
 
     private fun isOnline(): Boolean {
-        val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val connectivityManager =
+            activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val activeNetwork = connectivityManager?.activeNetwork
         val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
-        val isOnline = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
-        return isOnline
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
     private fun resetFields() {

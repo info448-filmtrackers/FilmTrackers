@@ -8,12 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
 import java.io.FileWriter
 
-//import edu.uw.ischool.mwoode.filmtrackers.databinding.ActivityMainBinding
-
 class MainActivity : AppCompatActivity() {
-
-//    private lateinit var binding : ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,9 +30,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-        val test = supportFragmentManager.findFragmentByTag("fragment_homepage_option")
-        Log.i("INFO", test.toString())
 
         setupUserDataFile()
     }

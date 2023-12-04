@@ -14,6 +14,13 @@
         android:icon="@drawable/baseline_search_24"
         android:title="Search" />
 
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/userHistory"
+        android:icon="@drawable/bookmark"
+        android:title="User History" />
+
     <!--  Temporary for testing purposes only. The actual version will be linked to the search page - Lauren  -->
     <item
         android:layout_width="wrap_content"

@@ -29,7 +29,6 @@ import java.util.Calendar
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
-private const val MOVIE_ID_PARAM = "movieIdParam"
 private const val TAG = "AddMovieFragment"
 
 class AddMovieFragment : Fragment() {
@@ -51,18 +50,26 @@ class AddMovieFragment : Fragment() {
         arguments?.let {
             // TODO: movieId will be passed in from the search page...
             // alternatively, the search page can just pass the movie data in an intent extra to avoid doing another API call
-//            movieIdParam = it.getInt(MOVIE_ID_PARAM)
+            movieIdParam = it.getInt(MOVIE_ID_PARAM)
         }
+        movieIdParam = 201
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_add_movie, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_add_movie, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val newMovieCardFragment = MovieCardFragment()
         childFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, MovieCardFragment())
+            .replace(R.id.fragmentContainerView, newMovieCardFragment)
+            .addToBackStack(null)
+            .hide(newMovieCardFragment)
             .commit()
 
         thumbsUpToggle = view.findViewById(R.id.thumbsUpToggle) as ToggleButton
@@ -71,7 +78,6 @@ class AddMovieFragment : Fragment() {
         userReviewEditText = view.findViewById(R.id.userReviewEditText) as EditText
         addMovieBtn = view.findViewById(R.id.addMovieBtn) as Button
 
-        movieIdParam = 200
         updateMovieCard()
 
         // setup interactive components
@@ -122,9 +128,6 @@ class AddMovieFragment : Fragment() {
                 navigateToFragment(movieHistoryFragment)
             }
         }
-
-        // Inflate the layout for this fragment
-        return view
     }
 
     private fun updateMovieCard() {
@@ -172,17 +175,19 @@ class AddMovieFragment : Fragment() {
                         val readMoreBtn = it.view?.findViewById(R.id.readMoreBtn) as Button
 
                         movieCardTitleTextView.text = movieData["title"].toString()
-                        movieCardRatingTextView.text = "$rating/10"
+                        movieCardRatingTextView.text = "Rating: $rating/10"
                         movieCardDescTextView.text = movieData["tagline"].toString()
                         movieCardImageView.setImageBitmap(bitmap)
                         readMoreBtn.setOnClickListener {
-                            val detailedFragment = DetailedFragment()
+                            val detailedFragment = DetailedFragment.newInstance(movieIdParam)
                             navigateToFragment(detailedFragment)
                         }
                     }
 
-                    val fragmentTransaction = childFragmentManager.beginTransaction()
-                    fragmentTransaction.show(movieCardFragment)
+                    childFragmentManager.beginTransaction()
+                        .show(movieCardFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }
@@ -243,6 +248,7 @@ class AddMovieFragment : Fragment() {
     private fun navigateToFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout, fragment)
+            addToBackStack(null)
             commit()
         }
     }

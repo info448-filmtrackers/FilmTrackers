@@ -25,14 +25,15 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="Avatar"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/movieRating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="4.5/5" />
+            android:text="Rating: 4.5/5" />
 
         <TextView
             android:id="@+id/movieDescription"

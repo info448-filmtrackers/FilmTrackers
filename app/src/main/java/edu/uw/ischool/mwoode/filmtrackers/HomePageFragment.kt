@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +21,9 @@ class HomePageFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var userHistoryHomepageCard: Button
+    private lateinit var searchHomepageCard: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,30 @@ class HomePageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home_page, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        userHistoryHomepageCard = view.findViewById(R.id.userHistoryHomepageCard) as Button
+        searchHomepageCard = view.findViewById(R.id.searchHomepageCard) as Button
+
+        userHistoryHomepageCard.setOnClickListener {
+            val movieHistoryFragment = MovieHistoryFragment()
+            navigateToFragment(movieHistoryFragment)
+        }
+
+        searchHomepageCard.setOnClickListener {
+            val searchFragment = SearchFragment()
+            navigateToFragment(searchFragment)
+        }
+    }
+
+    private fun navigateToFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout, fragment)
+            commit()
+        }
     }
 
     companion object {

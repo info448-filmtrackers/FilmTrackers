@@ -7,4 +7,7 @@ const val BEARER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2Y2JmOTRjY2RmNzM2Y2JhN
 // ADD MOVIE CONSTANTS
 const val USER_DATA_FILE = "user_movie_data.json"
 
+// FRAGMENT PARAM CONSTANTS
+const val MOVIE_ID_PARAM = "movieIdParam"
+
 data class UserReview(var movieId: Int, var liked: Boolean, var dateWatched: String, var review: String)

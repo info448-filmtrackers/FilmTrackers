@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val homePageFragment = HomePageFragment();
         val searchFragment = SearchFragment();
+        val userHistoryFragment = MovieHistoryFragment();
         val addMovieFragment = AddMovieFragment();
 
         setFragment(homePageFragment)
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.home -> setFragment(homePageFragment)
                 R.id.search -> setFragment(searchFragment)
+                R.id.userHistory -> setFragment(userHistoryFragment)
                 R.id.addMovie -> setFragment(addMovieFragment)
             }
             true

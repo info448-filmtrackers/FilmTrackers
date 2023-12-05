@@ -9,14 +9,15 @@ import java.io.File
 import java.io.FileWriter
 
 class MainActivity : AppCompatActivity() {
+
+    private val homePageFragment = HomePageFragment();
+    private val searchFragment = SearchFragment();
+    private val userHistoryFragment = MovieHistoryFragment();
+    private val addMovieFragment = AddMovieFragment(); // TODO: Remove later
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
-        val homePageFragment = HomePageFragment();
-        val searchFragment = SearchFragment();
-        val userHistoryFragment = MovieHistoryFragment();
-        val addMovieFragment = AddMovieFragment();
 
         setFragment(homePageFragment)
 
@@ -26,12 +27,22 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> setFragment(homePageFragment)
                 R.id.search -> setFragment(searchFragment)
                 R.id.userHistory -> setFragment(userHistoryFragment)
-                R.id.addMovie -> setFragment(addMovieFragment)
+                R.id.addMovie -> setFragment(addMovieFragment) // TODO: Remove later
             }
             true
         }
 
         setupUserDataFile()
+    }
+
+    fun switchToFragment(fragmentId: Int) {
+        val targetFragment = when (fragmentId) {
+            R.id.search -> searchFragment
+            R.id.userHistory -> userHistoryFragment
+            R.id.addMovie -> addMovieFragment // TODO: remove later
+            else -> homePageFragment
+        }
+        setFragment(targetFragment)
     }
 
     private fun setFragment(fragment: Fragment) {

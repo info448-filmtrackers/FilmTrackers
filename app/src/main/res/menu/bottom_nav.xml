@@ -21,6 +21,16 @@
         android:icon="@drawable/bookmark"
         android:title="User History" />
 
+    <!--  Dummy navbar item used for certain pages when we want unselected navbar
+          e.g. add movie page, detailed movie page -->
+    <item
+        android:layout_width="20px"
+        android:layout_height="20px"
+        android:id="@+id/unselectedNav"
+        android:title=""
+        android:enabled="false"
+        android:visible="false"/>
+
     <!--  Temporary for testing purposes only. The actual version will be linked to the search page - Lauren  -->
     <item
         android:layout_width="wrap_content"

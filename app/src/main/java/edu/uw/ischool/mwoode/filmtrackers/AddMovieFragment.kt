@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
@@ -261,6 +262,18 @@ class AddMovieFragment : Fragment() {
             commit()
         }
     }
+
+    // TODO:
+    // for use later, when we are moving from a fragment on navbar to a fragment not available on navbar
+    // e.g. add movie page, movie details page
+    private fun unselectNavbarItems() {
+        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if (bottomNavigationView != null) {
+            bottomNavigationView.selectedItemId = R.id.unselectedNav
+        }
+    }
+
+
 
     companion object {
         // Creates a new instance of the AddMovieFragment using the provided parameters.

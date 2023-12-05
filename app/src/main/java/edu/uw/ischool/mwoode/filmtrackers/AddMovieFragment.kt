@@ -113,7 +113,7 @@ class AddMovieFragment : Fragment() {
             val datePickerDialog = DatePickerDialog(
                 context as Context,
                 { _, year, month, day ->
-                    dateWatched = "$month/$day/$year"
+                    dateWatched = "${month + 1}/$day/$year"
                     dateWatchedEditText.setText(dateWatched)
                 },
                 year, month, day

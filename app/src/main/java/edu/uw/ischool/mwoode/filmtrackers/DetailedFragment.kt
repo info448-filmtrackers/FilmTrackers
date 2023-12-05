@@ -22,6 +22,8 @@ private const val TAG = "DetailedMovieFragment"
 class DetailedFragment : Fragment() {
     private var movieIdParam: Int? = null
 
+    private lateinit var backButton: ImageView
+
     private lateinit var movieImage: ImageView
     private lateinit var movieTitle: TextView
     private lateinit var movieRating: TextView
@@ -48,6 +50,8 @@ class DetailedFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_detailed, container, false)
+
+        backButton = view.findViewById(R.id.backArrow) as ImageView
 
         movieImage = view?.findViewById(R.id.moviePoster) as ImageView
         movieTitle = view.findViewById(R.id.detailTitle) as TextView
@@ -168,7 +172,19 @@ class DetailedFragment : Fragment() {
                 movieEditor.text = "Editor: " + editorList.toString().replace("[", "").replace("]", "")
                 movieActors.text = "Actors: " + castList.toString().replace("[", "").replace("]", "")
                 movieSummary.text = "Summary:\n" + movieData["overview"].toString()
+
+                backButton.setOnClickListener {
+                    val addMovieFragment = AddMovieFragment()
+                    switchFragment(addMovieFragment)
+                }
             }
+        }
+    }
+
+    private fun switchFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout, fragment);
+            commit();
         }
     }
 

@@ -6,9 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".DetailedFragment">
 
+    <ImageView
+        android:id="@+id/backArrow"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:src="@drawable/iconmonstr_arrow_left_lined"
+        android:contentDescription="TODO" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="534dp"
+        android:layout_height="512dp"
         android:layout_marginTop="50dp">
 
         <LinearLayout

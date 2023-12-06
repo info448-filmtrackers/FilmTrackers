@@ -53,7 +53,7 @@ class AddMovieFragment : Fragment() {
             // alternatively, the search page can just pass the movie data in an intent extra to avoid doing another API call
             movieIdParam = it.getInt(MOVIE_ID_PARAM)
         }
-        movieIdParam = 201
+        //movieIdParam = 201
     }
 
     override fun onCreateView(
@@ -279,7 +279,7 @@ class AddMovieFragment : Fragment() {
         // Creates a new instance of the AddMovieFragment using the provided parameters.
         @JvmStatic
         fun newInstance(movieId: Int) =
-            HomePageFragment().apply {
+            AddMovieFragment().apply {
                 arguments = Bundle().apply {
                     putInt(MOVIE_ID_PARAM, movieId)
                 }

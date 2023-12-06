@@ -66,6 +66,7 @@ class DetailedFragment : Fragment() {
         movieActors = view.findViewById(R.id.detailActor) as TextView
         movieSummary = view.findViewById(R.id.detailSummary) as TextView
 
+        // Gets movie id from add movie page
         Log.i(TAG, "movie id param: $movieIdParam")
         val movieId = movieIdParam as Int
         updateMovie(movieId)
@@ -80,6 +81,7 @@ class DetailedFragment : Fragment() {
         var movieData: JSONObject
         var movieCreditsData: JSONObject
 
+        // Sets the detail page UI
         executor.execute {
             val client = OkHttpClient()
             val movieDataRequest = Request.Builder()
@@ -181,6 +183,7 @@ class DetailedFragment : Fragment() {
         }
     }
 
+    // Returns to previous page
     private fun switchFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout, fragment);

@@ -58,6 +58,13 @@ class SearchResult : Fragment() {
         val descriptionTextView = view.findViewById<TextView>(R.id.movieDescription)
         descriptionTextView.text = description
 
+        // Moves to add movie page
+        val addMovieButton = view.findViewById<ImageView>(R.id.addButton)
+        addMovieButton.setOnClickListener {
+            val addMovieFragment = AddMovieFragment.newInstance(id)
+            switchFragment(addMovieFragment)
+        }
+
         Log.i("IMG", imgUrl.toString())
         if (imgUrl != null) {
             val executor: Executor = Executors.newSingleThreadExecutor()
@@ -86,6 +93,13 @@ class SearchResult : Fragment() {
         return view
     }
 
+    private fun switchFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout, fragment);
+            commit();
+        }
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -101,12 +115,14 @@ class SearchResult : Fragment() {
             title: String,
             description: String,
             rating: Double,
+            id: Int,
             imgUrl: String) =
             SearchResult().apply {
                 arguments = Bundle().apply {
                     putString(TITLE, title)
                     putString(DESC, description)
                     putDouble(RATING, rating)
+                    putInt(MOVIE_ID_PARAM, id)
                     putString(IMG, imgUrl)
                 }
             }

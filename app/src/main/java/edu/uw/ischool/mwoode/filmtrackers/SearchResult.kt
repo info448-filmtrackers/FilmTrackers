@@ -31,6 +31,7 @@ class SearchResult : Fragment() {
     private var description: String? = null
     private var rating: Double? = null
     private var imgUrl: String? = null
+    private var movieIdParam: Int = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class SearchResult : Fragment() {
             description = it.getString(DESC)
             rating = it.getDouble(RATING)
             imgUrl = it.getString(IMG)
+            movieIdParam = it.getInt(MOVIE_ID_PARAM)
         }
     }
 
@@ -57,6 +59,13 @@ class SearchResult : Fragment() {
 
         val descriptionTextView = view.findViewById<TextView>(R.id.movieDescription)
         descriptionTextView.text = description
+
+        // Moves to add movie page
+        val addMovieButton = view.findViewById<ImageView>(R.id.addButton)
+        addMovieButton.setOnClickListener {
+            val addMovieFragment = AddMovieFragment.newInstance(movieIdParam)
+            navigateToFragment(addMovieFragment)
+        }
 
         Log.i("IMG", imgUrl.toString())
         if (imgUrl != null) {
@@ -86,6 +95,14 @@ class SearchResult : Fragment() {
         return view
     }
 
+    private fun navigateToFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout, fragment)
+            addToBackStack(null)
+            commit()
+        }
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -101,12 +118,14 @@ class SearchResult : Fragment() {
             title: String,
             description: String,
             rating: Double,
+            id: Int,
             imgUrl: String) =
             SearchResult().apply {
                 arguments = Bundle().apply {
                     putString(TITLE, title)
                     putString(DESC, description)
                     putDouble(RATING, rating)
+                    putInt(MOVIE_ID_PARAM, id)
                     putString(IMG, imgUrl)
                 }
             }

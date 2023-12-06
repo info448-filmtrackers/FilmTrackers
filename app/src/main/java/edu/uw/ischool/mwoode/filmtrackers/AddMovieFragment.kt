@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
@@ -48,11 +49,8 @@ class AddMovieFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            // TODO: movieId will be passed in from the search page...
-            // alternatively, the search page can just pass the movie data in an intent extra to avoid doing another API call
             movieIdParam = it.getInt(MOVIE_ID_PARAM)
         }
-        movieIdParam = 201
     }
 
     override fun onCreateView(
@@ -65,12 +63,13 @@ class AddMovieFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val newMovieCardFragment = MovieCardFragment()
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, newMovieCardFragment)
-            .addToBackStack(null)
-            .hide(newMovieCardFragment)
-            .commit()
+        if (isAdded) {
+            val newMovieCardFragment = MovieCardFragment()
+            childFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, newMovieCardFragment)
+                .hide(newMovieCardFragment)
+                .commit()
+        }
 
         thumbsUpToggle = view.findViewById(R.id.thumbsUpToggle) as ToggleButton
         thumbsDownToggle = view.findViewById(R.id.thumbsDownToggle) as ToggleButton
@@ -110,7 +109,7 @@ class AddMovieFragment : Fragment() {
             val datePickerDialog = DatePickerDialog(
                 context as Context,
                 { _, year, month, day ->
-                    dateWatched = "$month/$day/$year"
+                    dateWatched = "${month + 1}/$day/$year"
                     dateWatchedEditText.setText(dateWatched)
                 },
                 year, month, day
@@ -119,7 +118,7 @@ class AddMovieFragment : Fragment() {
         }
 
         addMovieBtn.setOnClickListener {
-            if (userLikedMovie.isEmpty() || dateWatched.isNullOrEmpty() || userReviewEditText.text.isNullOrEmpty()) {
+            if (userLikedMovie.isEmpty() || dateWatched.isEmpty() || userReviewEditText.text.isNullOrEmpty()) {
                 Toast.makeText(activity, "Make sure all required fields are filled.", Toast.LENGTH_LONG).show()
             } else {
                 saveUserReview()
@@ -166,28 +165,34 @@ class AddMovieFragment : Fragment() {
 
                 val rating = (movieData["vote_average"] as Double).toInt()
                 activity?.runOnUiThread {
-                    movieCardFragment = childFragmentManager.findFragmentById(R.id.fragmentContainerView) as MovieCardFragment
-                    movieCardFragment?.let {
-                        val movieCardTitleTextView = it.view?.findViewById(R.id.movieTitle) as TextView
-                        val movieCardRatingTextView = it.view?.findViewById(R.id.movieRating) as TextView
-                        val movieCardDescTextView = it.view?.findViewById(R.id.movieDescription) as TextView
-                        val movieCardImageView = it.view?.findViewById(R.id.movieImg) as ImageView
-                        val readMoreBtn = it.view?.findViewById(R.id.readMoreBtn) as Button
+                    if (isAdded) {
+                        movieCardFragment =
+                            childFragmentManager.findFragmentById(R.id.fragmentContainerView) as MovieCardFragment
+                        movieCardFragment?.let {
+                            val movieCardTitleTextView =
+                                it.view?.findViewById(R.id.movieTitle) as TextView
+                            val movieCardRatingTextView =
+                                it.view?.findViewById(R.id.movieRating) as TextView
+                            val movieCardDescTextView =
+                                it.view?.findViewById(R.id.movieDescription) as TextView
+                            val movieCardImageView =
+                                it.view?.findViewById(R.id.movieImg) as ImageView
+                            val readMoreBtn = it.view?.findViewById(R.id.readMoreBtn) as Button
 
-                        movieCardTitleTextView.text = movieData["title"].toString()
-                        movieCardRatingTextView.text = "Rating: $rating/10"
-                        movieCardDescTextView.text = movieData["tagline"].toString()
-                        movieCardImageView.setImageBitmap(bitmap)
-                        readMoreBtn.setOnClickListener {
-                            val detailedFragment = DetailedFragment.newInstance(movieIdParam)
-                            navigateToFragment(detailedFragment)
+                            movieCardTitleTextView.text = movieData["title"].toString()
+                            movieCardRatingTextView.text = "Rating: $rating/10"
+                            movieCardDescTextView.text = movieData["tagline"].toString()
+                            movieCardImageView.setImageBitmap(bitmap)
+                            readMoreBtn.setOnClickListener {
+                                val detailedFragment = DetailedFragment.newInstance(movieIdParam)
+                                navigateToFragment(detailedFragment)
+                            }
                         }
-                    }
 
-                    childFragmentManager.beginTransaction()
-                        .show(movieCardFragment)
-                        .addToBackStack(null)
-                        .commit()
+                        childFragmentManager.beginTransaction()
+                            .show(movieCardFragment)
+                            .commit()
+                    }
                 }
             }
         }
@@ -225,11 +230,11 @@ class AddMovieFragment : Fragment() {
     }
 
     private fun isOnline(): Boolean {
-        val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val connectivityManager =
+            activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val activeNetwork = connectivityManager?.activeNetwork
         val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
-        val isOnline = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
-        return isOnline
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
     private fun resetFields() {
@@ -257,7 +262,7 @@ class AddMovieFragment : Fragment() {
         // Creates a new instance of the AddMovieFragment using the provided parameters.
         @JvmStatic
         fun newInstance(movieId: Int) =
-            HomePageFragment().apply {
+            AddMovieFragment().apply {
                 arguments = Bundle().apply {
                     putInt(MOVIE_ID_PARAM, movieId)
                 }

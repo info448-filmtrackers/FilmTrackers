@@ -1,120 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailedFragment">
 
-    <TextView
-        android:id="@+id/detailTitle"
-        android:layout_width="210dp"
-        android:layout_height="30dp"
-        android:layout_gravity="right|center_horizontal"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="20dp"
-        android:text="Title: "
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/detailRating"
-        android:layout_width="210dp"
-        android:layout_height="20dp"
-        android:layout_gravity="right|center_horizontal"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"
-        android:text="Rating: "
-        android:textSize="13sp" />
-
-    <TextView
-        android:id="@+id/detailDate"
-        android:layout_width="210dp"
-        android:layout_height="20dp"
-        android:layout_gravity="right|center_horizontal"
-        android:layout_marginTop="75dp"
-        android:layout_marginEnd="20dp"
-        android:text="Release Date: "
-        android:textSize="13sp" />
-
-    <TextView
-        android:id="@+id/detailGenre"
-        android:layout_width="210dp"
-        android:layout_height="30dp"
-        android:layout_gravity="right|center_horizontal"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="20dp"
-        android:text="Genre: "
-        android:textSize="13sp" />
-
     <ImageView
-        android:id="@+id/moviePoster"
-        android:layout_width="140dp"
-        android:layout_height="200dp"
-        android:layout_marginVertical="15dp"
-        android:layout_marginStart="35dp"
-        android:contentDescription="TODO" />
+        android:id="@+id/backArrow"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/iconmonstr_arrow_left_lined" />
 
-    <TextView
-        android:id="@+id/detailDirector"
-        android:layout_width="372dp"
-        android:layout_height="20dp"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="220dp"
-        android:text="Director: "
-        android:textSize="13sp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="512dp"
+        android:layout_marginTop="50dp">
 
-    <TextView
-        android:id="@+id/detailWriter"
-        android:layout_width="372dp"
-        android:layout_height="20dp"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="245dp"
-        android:text="Writer: "
-        android:textSize="13sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/detailProducer"
-        android:layout_width="372dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="270dp"
-        android:text="Producer: "
-        android:textSize="13sp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="258dp">
 
-    <TextView
-        android:id="@+id/detailEditor"
-        android:layout_width="372dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="310dp"
-        android:text="Editor: "
-        android:textSize="13sp" />
+                <ImageView
+                    android:id="@+id/moviePoster"
+                    android:layout_width="145dp"
+                    android:layout_height="235dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="230dp"
+                    android:contentDescription="TODO"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/detailActor"
-        android:layout_width="372dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="350dp"
-        android:text="Actors: "
-        android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/detailTitle"
+                    android:layout_width="200dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/unbounded"
+                    android:text="Title: "
+                    android:textSize="21sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/detailDate"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/moviePoster"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/detailCompany"
-        android:layout_width="210dp"
-        android:layout_height="80dp"
-        android:layout_gravity="right|top"
-        android:layout_marginTop="135dp"
-        android:layout_marginEnd="20dp"
-        android:text="Production Company: "
-        android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/detailRating"
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Rating: "
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/detailGenre"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/moviePoster"
+                    app:layout_constraintTop_toBottomOf="@+id/detailDate" />
 
-    <TextView
-        android:id="@+id/detailSummary"
-        android:layout_width="372dp"
-        android:layout_height="171dp"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="435dp"
-        android:text="Summary: "
-        android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/detailDate"
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Release Date: "
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/detailRating"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/moviePoster"
+                    app:layout_constraintTop_toBottomOf="@+id/detailTitle" />
+
+                <TextView
+                    android:id="@+id/detailGenre"
+                    android:layout_width="200dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Genre: "
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/moviePoster"
+                    app:layout_constraintTop_toBottomOf="@+id/detailRating" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/detailDirector"
+                android:layout_width="360dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center|top"
+                android:text="Director: "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/detailWriter"
+                android:layout_width="360dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="10dp"
+                android:text="Writer: "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/detailProducer"
+                android:layout_width="360dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="10dp"
+                android:text="Producer: "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/detailEditor"
+                android:layout_width="360dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="10dp"
+                android:text="Editor: "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/detailCompany"
+                android:layout_width="360dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="10dp"
+                android:text="Production Company: "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/detailActor"
+                android:layout_width="360dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="10dp"
+                android:text="Actors: "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/detailSummary"
+                android:layout_width="360dp"
+                android:layout_height="310dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="10dp"
+                android:text="Summary: "
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

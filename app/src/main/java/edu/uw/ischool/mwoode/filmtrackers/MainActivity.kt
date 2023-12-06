@@ -3,49 +3,65 @@ package edu.uw.ischool.mwoode.filmtrackers
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
 import java.io.FileWriter
 
-//import edu.uw.ischool.mwoode.filmtrackers.databinding.ActivityMainBinding
-
 class MainActivity : AppCompatActivity() {
 
-//    private lateinit var binding : ActivityMainBinding
+    private val homePageFragment = HomePageFragment();
+    private val searchFragment = SearchFragment();
+    private val userHistoryFragment = MovieHistoryFragment();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
-        val homePageFragment = HomePageFragment();
-        val searchFragment = SearchFragment();
-        val userHistoryFragment = MovieHistoryFragment();
-        val addMovieFragment = AddMovieFragment();
 
         setFragment(homePageFragment)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.home -> setFragment(homePageFragment)
-                R.id.search -> setFragment(searchFragment)
-                R.id.userHistory -> setFragment(userHistoryFragment)
-                R.id.addMovie -> setFragment(addMovieFragment)
-            }
+            switchToFragment(it.itemId)
             true
         }
 
-        val test = supportFragmentManager.findFragmentByTag("fragment_homepage_option")
-        Log.i("INFO", test.toString())
-
         setupUserDataFile()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        unselectNavbarItems()
+    }
+
+    fun switchToFragment(itemId: Int) {
+        val targetFragment = when (itemId) {
+            R.id.search -> searchFragment
+            R.id.userHistory -> userHistoryFragment
+            else -> homePageFragment
+        }
+
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout, targetFragment)
+            addToBackStack(null)
+            commit()
+        }
     }
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout, fragment);
             commit();
+        }
+    }
+
+    // for use later, when we are moving from a fragment on navbar to a fragment not available on navbar
+    // e.g. add movie page, movie details page
+    private fun unselectNavbarItems() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if (bottomNavigationView != null) {
+            bottomNavigationView.selectedItemId = R.id.unselectedNav
         }
     }
 

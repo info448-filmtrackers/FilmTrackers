@@ -91,6 +91,7 @@ class SearchFragment : Fragment() {
                 movieData.getString("title"),
                 movieData.getString("overview"),
                 movieData.getDouble("vote_average"),
+                movieData.getInt("id"),
                 IMG_BASE_URL + backdropPath
             )
 

@@ -64,11 +64,12 @@
         </LinearLayout>
     </LinearLayout>
     <ImageView
-        android:src="@drawable/plus_circle"
+        android:id="@+id/addButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:backgroundTint="@color/black"
         android:layout_marginTop="10dp"
+        android:backgroundTint="@color/black"
+        android:src="@drawable/plus_circle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,8 @@ private const val TAG = "DetailedMovieFragment"
 
 class DetailedFragment : Fragment() {
     private var movieIdParam: Int? = null
+
+    private lateinit var backButton: ImageView
 
     private lateinit var movieImage: ImageView
     private lateinit var movieTitle: TextView
@@ -48,6 +51,8 @@ class DetailedFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_detailed, container, false)
 
+        backButton = view.findViewById(R.id.backArrow) as ImageView
+
         movieImage = view?.findViewById(R.id.moviePoster) as ImageView
         movieTitle = view.findViewById(R.id.detailTitle) as TextView
         movieRating = view.findViewById(R.id.detailRating) as TextView
@@ -61,6 +66,7 @@ class DetailedFragment : Fragment() {
         movieActors = view.findViewById(R.id.detailActor) as TextView
         movieSummary = view.findViewById(R.id.detailSummary) as TextView
 
+        // Gets movie id from add movie page
         Log.i(TAG, "movie id param: $movieIdParam")
         val movieId = movieIdParam as Int
         updateMovie(movieId)
@@ -69,40 +75,35 @@ class DetailedFragment : Fragment() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateMovie(movieId: Int) {
-        //val detailUrl = "https://api.themoviedb.org/3/movie/162?language=en-US"
-        //val creditsUrl = "https://api.themoviedb.org/3/movie/162/credits?language=en-US"
-
         val executor: Executor = Executors.newSingleThreadExecutor()
-
-        val movieExecutor: Executor = Executors.newSingleThreadExecutor()
-        val creditsExecutor: Executor = Executors.newSingleThreadExecutor()
         var movieData: JSONObject
         var movieCreditsData: JSONObject
 
-        //executor.execute {
-        movieExecutor.execute {
+        // Sets the detail page UI
+        executor.execute {
             val client = OkHttpClient()
             val movieDataRequest = Request.Builder()
-                .url(getString(R.string.movie_details_url, movieId)) // just replace 2nd number with movie id
+                .url(getString(R.string.movie_details_url, movieId))
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer $BEARER_TOKEN")
                 .build()
 
             val movieDataResponse = client.newCall(movieDataRequest).execute()
-            movieData = JSONObject(movieDataResponse.body()?.string())
+            movieData = JSONObject(movieDataResponse.body()?.string().toString())
             Log.i(TAG, "response: $movieData")
 
             val movieCreditsRequest = Request.Builder()
-                .url(getString(R.string.movie_credits_url, movieId)) // just replace 2nd number with movie id
+                .url(getString(R.string.movie_credits_url, movieId))
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer $BEARER_TOKEN")
                 .build()
 
             val movieCreditsResponse = client.newCall(movieCreditsRequest).execute()
-            movieCreditsData = JSONObject(movieCreditsResponse.body()?.string())
+            movieCreditsData = JSONObject(movieCreditsResponse.body()?.string().toString())
             Log.i(TAG, "response: $movieCreditsData")
 
             val movieImgRequest = Request.Builder()
@@ -173,7 +174,20 @@ class DetailedFragment : Fragment() {
                 movieEditor.text = "Editor: " + editorList.toString().replace("[", "").replace("]", "")
                 movieActors.text = "Actors: " + castList.toString().replace("[", "").replace("]", "")
                 movieSummary.text = "Summary:\n" + movieData["overview"].toString()
+
+                backButton.setOnClickListener {
+                    val addMovieFragment = AddMovieFragment()
+                    switchFragment(addMovieFragment)
+                }
             }
+        }
+    }
+
+    // Returns to previous page
+    private fun switchFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout, fragment);
+            commit();
         }
     }
 

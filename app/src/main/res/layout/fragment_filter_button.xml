@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button
+    android:id="@+id/filterButton"
+    android:backgroundTint="#5e3fba"
+    android:textSize="5pt"
+    android:minHeight="40dp"
+    android:fontFamily="@font/unbounded"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:height="15dp"
+    android:layout_marginHorizontal="2.5dp"
+    android:text=""
+    xmlns:android="http://schemas.android.com/apk/res/android" />

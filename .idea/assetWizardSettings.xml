@@ -34,8 +34,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="search_icon_grey" />
-                            <entry key="sourceFile" value="$PROJECT_DIR$/img/search-icon-grey.svg" />
+                            <entry key="outputName" value="filter" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/img/filter.svg" />
                           </map>
                         </option>
                       </PersistentState>

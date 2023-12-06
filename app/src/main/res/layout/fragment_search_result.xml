@@ -63,7 +63,6 @@
 
         </LinearLayout>
     </LinearLayout>
-
     <ImageView
         android:src="@drawable/plus_circle"
         android:layout_width="30dp"

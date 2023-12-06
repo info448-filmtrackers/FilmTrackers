@@ -31,6 +31,7 @@ class SearchResult : Fragment() {
     private var description: String? = null
     private var rating: Double? = null
     private var imgUrl: String? = null
+    private var movieIdParam: Int = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class SearchResult : Fragment() {
             description = it.getString(DESC)
             rating = it.getDouble(RATING)
             imgUrl = it.getString(IMG)
+            movieIdParam = it.getInt(MOVIE_ID_PARAM)
         }
     }
 
@@ -61,8 +63,8 @@ class SearchResult : Fragment() {
         // Moves to add movie page
         val addMovieButton = view.findViewById<ImageView>(R.id.addButton)
         addMovieButton.setOnClickListener {
-            val addMovieFragment = AddMovieFragment.newInstance(id)
-            switchFragment(addMovieFragment)
+            val addMovieFragment = AddMovieFragment.newInstance(movieIdParam)
+            navigateToFragment(addMovieFragment)
         }
 
         Log.i("IMG", imgUrl.toString())
@@ -93,10 +95,11 @@ class SearchResult : Fragment() {
         return view
     }
 
-    private fun switchFragment(fragment: Fragment) {
+    private fun navigateToFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_layout, fragment);
-            commit();
+            replace(R.id.frame_layout, fragment)
+            addToBackStack(null)
+            commit()
         }
     }
 

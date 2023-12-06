@@ -49,11 +49,8 @@ class AddMovieFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            // TODO: movieId will be passed in from the search page...
-            // alternatively, the search page can just pass the movie data in an intent extra to avoid doing another API call
             movieIdParam = it.getInt(MOVIE_ID_PARAM)
         }
-        //movieIdParam = 201
     }
 
     override fun onCreateView(
@@ -70,7 +67,6 @@ class AddMovieFragment : Fragment() {
             val newMovieCardFragment = MovieCardFragment()
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView, newMovieCardFragment)
-                .addToBackStack(null)
                 .hide(newMovieCardFragment)
                 .commit()
         }
@@ -195,7 +191,6 @@ class AddMovieFragment : Fragment() {
 
                         childFragmentManager.beginTransaction()
                             .show(movieCardFragment)
-                            .addToBackStack(null)
                             .commit()
                     }
                 }
@@ -262,18 +257,6 @@ class AddMovieFragment : Fragment() {
             commit()
         }
     }
-
-    // TODO:
-    // for use later, when we are moving from a fragment on navbar to a fragment not available on navbar
-    // e.g. add movie page, movie details page
-    private fun unselectNavbarItems() {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if (bottomNavigationView != null) {
-            bottomNavigationView.selectedItemId = R.id.unselectedNav
-        }
-    }
-
-
 
     companion object {
         // Creates a new instance of the AddMovieFragment using the provided parameters.

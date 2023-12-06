@@ -3,6 +3,7 @@ package edu.uw.ischool.mwoode.filmtrackers
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
@@ -13,7 +14,6 @@ class MainActivity : AppCompatActivity() {
     private val homePageFragment = HomePageFragment();
     private val searchFragment = SearchFragment();
     private val userHistoryFragment = MovieHistoryFragment();
-    private val addMovieFragment = AddMovieFragment(); // TODO: Remove later
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,32 +23,45 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.home -> setFragment(homePageFragment)
-                R.id.search -> setFragment(searchFragment)
-                R.id.userHistory -> setFragment(userHistoryFragment)
-                R.id.addMovie -> setFragment(addMovieFragment) // TODO: Remove later
-            }
+            switchToFragment(it.itemId)
             true
         }
 
         setupUserDataFile()
     }
 
-    fun switchToFragment(fragmentId: Int) {
-        val targetFragment = when (fragmentId) {
+    override fun onBackPressed() {
+        super.onBackPressed()
+        unselectNavbarItems()
+    }
+
+    fun switchToFragment(itemId: Int) {
+        val targetFragment = when (itemId) {
             R.id.search -> searchFragment
             R.id.userHistory -> userHistoryFragment
-            R.id.addMovie -> addMovieFragment // TODO: remove later
             else -> homePageFragment
         }
-        setFragment(targetFragment)
+
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout, targetFragment)
+            addToBackStack(null)
+            commit()
+        }
     }
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout, fragment);
             commit();
+        }
+    }
+
+    // for use later, when we are moving from a fragment on navbar to a fragment not available on navbar
+    // e.g. add movie page, movie details page
+    private fun unselectNavbarItems() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if (bottomNavigationView != null) {
+            bottomNavigationView.selectedItemId = R.id.unselectedNav
         }
     }
 

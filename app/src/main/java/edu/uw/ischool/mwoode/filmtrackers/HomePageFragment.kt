@@ -31,32 +31,21 @@ class HomePageFragment : Fragment() {
         searchHomepageCard = view.findViewById(R.id.searchHomepageCard) as Button
 
         userHistoryHomepageCard.setOnClickListener {
-//            val movieHistoryFragment = MovieHistoryFragment()
-//            navigateToFragment(movieHistoryFragment)
             navigateToFragment(R.id.userHistory)
         }
 
         searchHomepageCard.setOnClickListener {
-//            val searchFragment = SearchFragment()
-//            navigateToFragment(searchFragment)
             navigateToFragment(R.id.search)
         }
     }
 
-    private fun navigateToFragment(fragmentId: Int) {
-        // option 1: create a new fragment each time and replace
-//        requireActivity().supportFragmentManager.beginTransaction().apply {
-//            replace(R.id.frame_layout, fragment)
-//            commit()
-//        }
-
-        // option 2: navigate to existing fragment + preserve state
-        (activity as MainActivity).switchToFragment(fragmentId)
+    private fun navigateToFragment(itemId: Int) {
+        (activity as MainActivity).switchToFragment(itemId)
 
         // update navbar on change
         val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         if (bottomNavigationView != null) {
-            bottomNavigationView.selectedItemId = fragmentId
+            bottomNavigationView.selectedItemId = itemId
         }
     }
 

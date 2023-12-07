@@ -146,7 +146,7 @@ class DetailedFragment : Fragment() {
                 companyList.add(companyName)
             }
 
-            for (i in 0 until 15) {
+            for (i in 0 until cast.length()) {
                 val castMember = cast.getJSONObject(i)
                 val actorName = castMember.getString("name")
                 castList.add(actorName)
@@ -190,7 +190,8 @@ class DetailedFragment : Fragment() {
     // Returns to previous page
     private fun switchFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_layout, fragment);
+            replace(R.id.frame_layout, fragment)
+            addToBackStack(null)
             commit();
         }
     }

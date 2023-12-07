@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="60dp"
+    android:padding="25dp"
     tools:context=".HomePageFragment">
     <TextView
         android:id="@+id/movieTitle"
@@ -23,42 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp">
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="vertical"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:layout_editor_absoluteX="10dp">-->
 
-<!--            <LinearLayout-->
-<!--                android:id="@+id/linearLayout2"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
-
-<!--                <include layout="@layout/fragment_homepage_option" />-->
-<!--            </LinearLayout>-->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/linearLayout3"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/linearLayout2">-->
-
-<!--                <include layout="@layout/fragment_homepage_option" />-->
-<!--            </LinearLayout>-->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/linearLayout4"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/linearLayout3">-->
-
-<!--                <include layout="@layout/fragment_homepage_option" />-->
-<!--            </LinearLayout>-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,10 +32,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:paddingVertical="10dp"
-                android:layout_marginHorizontal="25dp"
+                android:layout_marginHorizontal="5dp"
                 android:background="@drawable/rounder_corner"
                 android:layout_marginVertical="10dp"
-                android:text="Your Movie History"
+                android:text="Movie History"
                 android:textSize="20dp"
                 android:fontFamily="@font/unbounded"
                 android:gravity="bottom|right" />
@@ -82,10 +45,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:paddingVertical="10dp"
-                android:layout_marginHorizontal="25dp"
+                android:layout_marginHorizontal="5dp"
                 android:background="@drawable/rounder_corner"
                 android:layout_marginVertical="10dp"
-                android:text="Search for Movies"
+                android:text="Search Movies"
                 android:textSize="20dp"
                 android:fontFamily="@font/unbounded"
                 android:gravity="bottom|right" />

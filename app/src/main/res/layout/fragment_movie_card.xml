@@ -11,7 +11,7 @@
         android:layout_width="120dp"
         android:layout_height="160dp"
         android:layout_marginRight="10dp"
-        android:src="@drawable/placeholder_movie" />
+        android:src="@drawable/no_movie_placeholder" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Avatar"
+            android:text="Movie Title"
             android:textSize="20dp"
             android:fontFamily="@font/unbounded"
             android:textStyle="bold"/>

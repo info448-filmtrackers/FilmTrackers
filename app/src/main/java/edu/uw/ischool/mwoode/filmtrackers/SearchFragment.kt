@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.flexbox.FlexboxLayout
 import okhttp3.OkHttpClient
@@ -131,15 +132,22 @@ class SearchFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val searchTerm = s.toString()
-                searchInProg?.cancel()
-                searchInProg = object : TimerTask() {
-                    override fun run() {
-                        search(searchTerm)
+                if (!((activity as MainActivity).isOnline())) {
+                    Toast.makeText(
+                        activity,
+                        "You are currently offline and you have no access to the internet. Please check your connection.",
+                        Toast.LENGTH_SHORT).show()
+                } else {
+                    val searchTerm = s.toString()
+                    searchInProg?.cancel()
+                    searchInProg = object : TimerTask() {
+                        override fun run() {
+                            search(searchTerm)
+                        }
                     }
-                }
 
-                timer.schedule(searchInProg, 2000)
+                    timer.schedule(searchInProg, 2000)
+                }
             }
         })
 

@@ -1,9 +1,11 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.addCallback
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
@@ -20,6 +22,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setFragment(homePageFragment)
+
+        if (!isOnline()) {
+            Toast.makeText(
+                this,
+                "You are currently offline and you have no access to the internet. Please check your connection.",
+                Toast.LENGTH_SHORT).show()
+        }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener {
@@ -47,6 +56,13 @@ class MainActivity : AppCompatActivity() {
             addToBackStack(null)
             commit()
         }
+    }
+
+    fun isOnline(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val activeNetwork = connectivityManager?.activeNetwork
+        val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
     private fun setFragment(fragment: Fragment) {

@@ -67,28 +67,35 @@ class SearchResult : Fragment() {
             navigateToFragment(addMovieFragment)
         }
 
-        if (imgUrl != null) {
-            val executor: Executor = Executors.newSingleThreadExecutor()
-            executor.execute {
-                try {
-                    val client = OkHttpClient()
-                    val movieImgRequest = Request.Builder()
-                        .url(imgUrl)
-                        .get()
-                        .addHeader("accept", "application/json")
-                        .addHeader("Authorization", "Bearer $BEARER_TOKEN")
-                        .build()
+        if (((activity as MainActivity).isOnline())) {
+            Log.i("IMG", imgUrl.toString())
+            if (imgUrl != null) {
+                val executor: Executor = Executors.newSingleThreadExecutor()
+                executor.execute {
+                    try {
+                        val client = OkHttpClient()
+                        val movieImgRequest = Request.Builder()
+                            .url(imgUrl)
+                            .get()
+                            .addHeader("accept", "application/json")
+                            .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+                            .build()
 
-                    val movieImgResponse = client.newCall(movieImgRequest).execute()
-                    val bitmap = BitmapFactory.decodeStream(movieImgResponse.body()?.source()?.inputStream())
+                        val movieImgResponse = client.newCall(movieImgRequest).execute()
+                        val bitmap = BitmapFactory.decodeStream(
+                            movieImgResponse.body()?.source()?.inputStream()
+                        )
 
-                    // fetch the img to display
-                    val imagePoster = view.findViewById<ImageView>(R.id.movieImg)
-                    activity?.runOnUiThread {
-                        imagePoster.setImageBitmap(bitmap)
+                        // fetch the img to display
+                        val imagePoster = view.findViewById<ImageView>(R.id.movieImg)
+                        activity?.runOnUiThread {
+                            if (bitmap != null) {
+                                imagePoster.setImageBitmap(bitmap)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
             }
         }

@@ -91,8 +91,6 @@ class SearchResult : Fragment() {
             }
         }
 
-        Log.i("FILTER_RES", "RENDERED VIEW")
-
         return view
     }
 

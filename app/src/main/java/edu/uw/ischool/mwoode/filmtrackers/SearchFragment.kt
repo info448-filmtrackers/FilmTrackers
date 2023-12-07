@@ -113,6 +113,8 @@ class SearchFragment : Fragment() {
         val timer = Timer()
 
         val root = inflater.inflate(R.layout.fragment_search, container, false);
+
+
         // search functionality
         val searchInput = root.findViewById<EditText>(R.id.searchBar)
 

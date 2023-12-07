@@ -40,8 +40,6 @@ class HomePageFragment : Fragment() {
     }
 
     private fun navigateToFragment(itemId: Int) {
-        (activity as MainActivity).switchToFragment(itemId)
-
         // update navbar on change
         val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         if (bottomNavigationView != null) {

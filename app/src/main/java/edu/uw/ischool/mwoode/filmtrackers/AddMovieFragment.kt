@@ -125,6 +125,10 @@ class AddMovieFragment : Fragment() {
 
                 val movieHistoryFragment = MovieHistoryFragment()
                 navigateToFragment(movieHistoryFragment)
+
+                // update navbar
+                val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+                bottomNavigationView?.selectedItemId = R.id.userHistory
             }
         }
     }

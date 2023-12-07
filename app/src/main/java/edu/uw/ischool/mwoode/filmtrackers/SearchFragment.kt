@@ -105,7 +105,9 @@ class SearchFragment : Fragment() {
             transaction.commit()
         }
 
-        view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.VISIBLE
+        activity?.runOnUiThread {
+            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.VISIBLE
+        }
     }
 
 

@@ -98,7 +98,7 @@
             <TextView
                 android:id="@+id/detailDirector"
                 android:layout_width="360dp"
-                android:layout_height="35dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center|top"
                 android:text="Director: "
                 android:textSize="16sp" />
@@ -106,7 +106,7 @@
             <TextView
                 android:id="@+id/detailWriter"
                 android:layout_width="360dp"
-                android:layout_height="35dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
                 android:text="Writer: "
@@ -115,7 +115,7 @@
             <TextView
                 android:id="@+id/detailProducer"
                 android:layout_width="360dp"
-                android:layout_height="35dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
                 android:text="Producer: "
@@ -124,7 +124,7 @@
             <TextView
                 android:id="@+id/detailEditor"
                 android:layout_width="360dp"
-                android:layout_height="35dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
                 android:text="Editor: "
@@ -133,7 +133,7 @@
             <TextView
                 android:id="@+id/detailCompany"
                 android:layout_width="360dp"
-                android:layout_height="50dp"
+                android:layout_height="75dp"
                 android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
                 android:text="Production Company: "
@@ -142,7 +142,7 @@
             <TextView
                 android:id="@+id/detailActor"
                 android:layout_width="360dp"
-                android:layout_height="120dp"
+                android:layout_height="345dp"
                 android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
                 android:text="Actors: "
@@ -151,7 +151,7 @@
             <TextView
                 android:id="@+id/detailSummary"
                 android:layout_width="360dp"
-                android:layout_height="310dp"
+                android:layout_height="350dp"
                 android:layout_gravity="center|top"
                 android:layout_marginTop="10dp"
                 android:text="Summary: "

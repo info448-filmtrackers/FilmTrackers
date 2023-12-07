@@ -8,6 +8,8 @@
     tools:context=".MovieHistoryFragment">
 
 
+
+
     <LinearLayout
         android:id="@+id/Title"
         android:layout_width="match_parent"
@@ -85,5 +87,19 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Add this TextView inside the ConstraintLayout -->
+    <TextView
+        android:id="@+id/movieInfoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/movieRating"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

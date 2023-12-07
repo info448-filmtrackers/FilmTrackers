@@ -39,7 +39,7 @@ class SearchFragment : Fragment() {
     private var tasksShown: Boolean = false
     private var searchInProg: TimerTask? = null
     private var filters: Array<String> = arrayOf("Popular", "Niche", "Highly Rated", "Foreign")
-    private val selectedFilters: ArrayList<String> = arrayListOf()
+    private var selectedFilters: ArrayList<String> = arrayListOf()
     private var lastSearch: JSONArray? = null
     private var filterButtons: ArrayList<FilterButton> = arrayListOf()
     private var genreFilters: HashMap<Int, String> = hashMapOf<Int, String>()
@@ -73,15 +73,19 @@ class SearchFragment : Fragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        selectedFilters = arrayListOf()
+        lastSearch = null
+        filterButtons = arrayListOf()
+    }
+
     fun displaySearchResults(searchResults: JSONArray) {
-        Log.i("SEARCH", searchResults.toString())
-        Log.i("FILTER", "SEARCH RESULTS UPDATED")
-
+        Log.i("FILTER", "Results to be shown: "+ searchResults.length())
         activity?.runOnUiThread {
+            Log.i("FILTER_RES", "CLEARING")
             view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
-//            view?.findViewById<FlexboxLayout>(R.id.filtersHolder)?.removeAllViews()
         }
-
 
         for (i in 0 until searchResults.length()) {
             val movieData = searchResults.getJSONObject(i)
@@ -102,6 +106,8 @@ class SearchFragment : Fragment() {
             // Commit the transaction
             transaction.commit()
         }
+        Log.i("FILTER_RES", "Added")
+        Log.i("FILTER", "Finished logging")
     }
 
 
@@ -132,7 +138,7 @@ class SearchFragment : Fragment() {
                     }
                 }
 
-                timer.schedule(searchInProg, 2000)
+                timer.schedule(searchInProg, 1000)
             }
         })
 
@@ -179,7 +185,7 @@ class SearchFragment : Fragment() {
                 val filteredSearchResults = arrayListOf<JSONObject>();
                 if (lastSearch != null) {
                     for (j in 0 until lastSearch!!.length()) {
-                        val currSearchResult = lastSearch!!.getJSONObject(i)
+                        val currSearchResult = lastSearch!!.getJSONObject(j)
                         var shouldBeIncluded = true
 
                         Log.i("FILTER", currSearchResult.toString())
@@ -206,7 +212,10 @@ class SearchFragment : Fragment() {
                 }
 
 
-                displaySearchResults(JSONArray(filteredSearchResults))
+                activity?.runOnUiThread {
+                    displaySearchResults(JSONArray(filteredSearchResults.toString()))
+                }
+
             }
             btn.onClick(addToList)
         }

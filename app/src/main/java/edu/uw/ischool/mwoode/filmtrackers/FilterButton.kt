@@ -1,5 +1,6 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -23,6 +24,7 @@ class FilterButton : Fragment() {
     // TODO: Rename and change types of parameters
     private var title: String? = null;
     private lateinit var button: Button;
+    private var selected: Boolean = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,16 @@ class FilterButton : Fragment() {
 
     fun onClick(callback: () -> Unit) {
         button.setOnClickListener{
+            activity?.runOnUiThread {
+                selected = !selected
+                if (selected) {
+                    button.background.setTint(Color.BLACK)
+                } else {
+                    button.background.setTint(Color.rgb(94, 63, 186))
+                }
+            }
             callback()
+
         }
     }
 

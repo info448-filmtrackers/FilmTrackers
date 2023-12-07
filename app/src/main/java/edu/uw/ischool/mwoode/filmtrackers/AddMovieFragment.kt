@@ -184,7 +184,7 @@ class AddMovieFragment : Fragment() {
                             movieCardDescTextView.text = movieData["tagline"].toString()
                             movieCardImageView.setImageBitmap(bitmap)
                             readMoreBtn.setOnClickListener {
-                                val detailedFragment = DetailedFragment.newInstance(movieIdParam)
+                                val detailedFragment = DetailedFragment.newInstance(movieIdParam, id)
                                 navigateToFragment(detailedFragment)
                             }
                         }

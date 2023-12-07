@@ -21,6 +21,7 @@ private const val TAG = "DetailedMovieFragment"
 
 class DetailedFragment : Fragment() {
     private var movieIdParam: Int? = null
+    private var addMovieFragmentId: Int? = null
 
     private lateinit var backButton: ImageView
 
@@ -41,6 +42,7 @@ class DetailedFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             movieIdParam = it.getInt(MOVIE_ID_PARAM)
+            addMovieFragmentId = it.getInt(ADD_MOVIE_FRAGMENT_ID_PARAM)
         }
     }
 
@@ -176,8 +178,10 @@ class DetailedFragment : Fragment() {
                 movieSummary.text = "Summary:\n" + movieData["overview"].toString()
 
                 backButton.setOnClickListener {
-                    val addMovieFragment = AddMovieFragment()
-                    switchFragment(addMovieFragment)
+                    fragmentManager?.popBackStackImmediate()
+//                    Log.i(TAG, "add movie fragment id: $addMovieFragmentId")
+//                    val addMovieFragment = childFragmentManager.findFragmentById(addMovieFragmentId as Int) as Fragment
+//                    switchFragment(addMovieFragment)
                 }
             }
         }
@@ -193,10 +197,11 @@ class DetailedFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(movieId: Int) =
+        fun newInstance(movieId: Int, addMovieFragmentId: Int) =
             DetailedFragment().apply {
                 arguments = Bundle().apply {
                     putInt(MOVIE_ID_PARAM, movieId)
+                    putInt(ADD_MOVIE_FRAGMENT_ID_PARAM, addMovieFragmentId)
                 }
             }
     }

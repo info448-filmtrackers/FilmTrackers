@@ -43,7 +43,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:src="@drawable/placeholder_movie" />
+            />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -64,7 +64,6 @@
                     android:fontFamily="@font/unbounded"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="Avatar kasldjf alskdjf al alsdkjfalksdj f"
                     android:textSize="20dp" />
 
                 <TextView
@@ -72,7 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="\???" />
+                    />
             </LinearLayout>
 
             <TextView
@@ -82,10 +81,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="lorem ipsum alskdjf a sfdkjl alksdj  asdklfj alksdjf asldkjf alksd fjlaskdj fklasj dfklj aslkdfj lkasjd fklasj dfkljaskldf jklasjdflkajsldkfjalksdfj lkasjdflkajslkdfjakls jdflkajsldkfjalks djflkas jdfl" />
+                />
 
         </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

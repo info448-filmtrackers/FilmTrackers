@@ -36,6 +36,14 @@ import android.annotation.SuppressLint
 
 private const val TAG = "MovieHistoryFragment"
 
+data class UserMovieData(
+    val dateWatched: String,
+    val liked: Boolean,
+    val movieId: Int,
+    val review: String
+)
+
+
 class MovieHistoryFragment : Fragment() {
 
     private var movieIdParam: Int? = null
@@ -45,14 +53,37 @@ class MovieHistoryFragment : Fragment() {
     private lateinit var imagePoster: ImageView
 
 
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        // Check if the movieIdParam is present in the arguments
+//        movieIdParam = arguments?.getInt(MOVIE_ID_PARAM)
+//
+//        // If movieIdParam is still null, set it to a default value (e.g., 221)
+//        if (movieIdParam == null) {
+//            movieIdParam = 223
+//        }
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            arguments?.let {
-                movieIdParam = it.getInt(MOVIE_ID_PARAM)
+
+        // Check if movieIdParam is present in the arguments
+        movieIdParam = arguments?.getInt(MOVIE_ID_PARAM)
+
+        // If movieIdParam is still null, try to get it from the user_movie_data.json file
+        if (movieIdParam == null) {
+            val filePath = requireActivity().getFilesDir().getPath().toString() + "/user_movie_data.json"
+            movieIdParam = readUserMovieData(filePath)
+
+            // If movieIdParam is still null, set it to a default value (e.g., 221)
+            if (movieIdParam == null) {
+                movieIdParam = 221
             }
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,8 +104,9 @@ class MovieHistoryFragment : Fragment() {
 
         // Gets movie id from add movie page
         Log.i(TAG, "movie id param: $movieIdParam")
+
 //        val movieId = movieIdParam as? Int ?: 0 // Provide a default value, like 0, or handle it based on your use case
-//        updateMovie(movieId)
+        updateMovie()
 
 
         return view
@@ -130,9 +162,34 @@ class MovieHistoryFragment : Fragment() {
                     imagePoster.setImageBitmap(bitmap)
                     titleTextView.text = movieData["title"].toString()
                     ratingTextView.text = "Rating: $rating/10"
+                    descriptionTextView.text = movieData["tagline"].toString()
                 }
             }
         }
+    }
+
+    private fun readUserMovieData(filePath: String): Int? {
+        try {
+            val file = File(filePath)
+            if (file.exists()) {
+                val fileReader = FileReader(file)
+                val gson = Gson()
+
+                // Read the JSON array from the file
+                val arrayType = object : TypeToken<List<UserMovieData>>() {}.type
+                val userMovieDataList: List<UserMovieData> = gson.fromJson(fileReader, arrayType)
+
+                // Check if the array is not empty
+                if (userMovieDataList.isNotEmpty()) {
+                    // Update movieIdParam with the movieId from the first object in the array
+                    return userMovieDataList[0].movieId
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error reading user_movie_data.json", e)
+        }
+
+        return null
     }
 
 

@@ -31,6 +31,8 @@ import android.graphics.Bitmap
 import java.util.Calendar
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import android.annotation.SuppressLint
+
 
 private const val TAG = "MovieHistoryFragment"
 
@@ -69,11 +71,17 @@ class MovieHistoryFragment : Fragment() {
         Log.i(TAG, "movie id param: $movieIdParam")
 
 
+        // Gets movie id from add movie page
+        Log.i(TAG, "movie id param: $movieIdParam")
+//        val movieId = movieIdParam as? Int ?: 0 // Provide a default value, like 0, or handle it based on your use case
+//        updateMovie(movieId)
+
+
         return view
     }
 
 
-    private fun updateMovie(movieId: Int) {
+    private fun updateMovie() {
         if (!isOnline()) {
             Toast.makeText(
                 activity,
@@ -89,7 +97,7 @@ class MovieHistoryFragment : Fragment() {
             executor.execute {
                 val client = OkHttpClient()
                 val movieDataRequest = Request.Builder()
-                    .url(getString(R.string.movie_details_url, movieId))
+                    .url(getString(R.string.movie_details_url, movieIdParam))
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", "Bearer $BEARER_TOKEN")

@@ -42,7 +42,6 @@ class SearchFragment : Fragment() {
     private val selectedFilters: ArrayList<String> = arrayListOf()
     private var lastSearch: JSONArray? = null
     private var filterButtons: ArrayList<FilterButton> = arrayListOf()
-    private var genreFilters: HashMap<Int, String> = hashMapOf<Int, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +72,11 @@ class SearchFragment : Fragment() {
         }
     }
 
+//    override fun onSaveInstanceState(outState: Bundle) {
+//
+//        super.onSaveInstanceState(outState)
+//    }
+
     fun displaySearchResults(searchResults: JSONArray) {
         Log.i("SEARCH", searchResults.toString())
         Log.i("FILTER", "SEARCH RESULTS UPDATED")
@@ -80,31 +84,29 @@ class SearchFragment : Fragment() {
         activity?.runOnUiThread {
             view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
             view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.GONE
-            // view?.findViewById<FlexboxLayout>(R.id.filtersHolder)?.removeAllViews()
+
+            for (i in 0 until searchResults.length()) {
+                val movieData = searchResults.getJSONObject(i)
+                val backdropPath = movieData.getString("poster_path")
+
+                val movieDataFragment = SearchResult.newInstance(
+                    movieData.getString("title"),
+                    movieData.getString("overview"),
+                    movieData.getDouble("vote_average"),
+                    movieData.getInt("id"),
+                    IMG_BASE_URL + backdropPath
+                )
+
+                val fragmentManager = childFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                transaction.add(R.id.searchResultsHolder, movieDataFragment)
+
+                // Commit the transaction
+                transaction.commit()
+            }
+
+            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.VISIBLE
         }
-
-
-        for (i in 0 until searchResults.length()) {
-            val movieData = searchResults.getJSONObject(i)
-            val backdropPath = movieData.getString("poster_path")
-
-            val movieDataFragment = SearchResult.newInstance(
-                movieData.getString("title"),
-                movieData.getString("overview"),
-                movieData.getDouble("vote_average"),
-                movieData.getInt("id"),
-                IMG_BASE_URL + backdropPath
-            )
-
-            val fragmentManager = childFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            transaction.add(R.id.searchResultsHolder, movieDataFragment)
-
-            // Commit the transaction
-            transaction.commit()
-        }
-
-        view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.VISIBLE
     }
 
 
@@ -140,6 +142,17 @@ class SearchFragment : Fragment() {
                 timer.schedule(searchInProg, 2000)
             }
         })
+
+        activity?.runOnUiThread {
+//            view?.findViewById<FlexboxLayout>(R.id.filtersHolder)?.removeAllViews()
+            for (i in 0 until filterButtons.size) {
+                val fragmentManager = childFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                transaction.remove(filterButtons[i])
+                transaction.commit()
+            }
+        }
+        filterButtons.clear()
 
         for (i in filters.indices) {
             Log.i("FILTER", "ADDING " + filters[i])

@@ -21,7 +21,6 @@ private const val TITLE = "title"
  * create an instance of this fragment.
  */
 class FilterButton : Fragment() {
-    // TODO: Rename and change types of parameters
     private var title: String? = null;
     private var selected: Boolean = false;
     private lateinit var button: Button;

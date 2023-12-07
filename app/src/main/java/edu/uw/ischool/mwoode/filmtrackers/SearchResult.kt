@@ -85,7 +85,9 @@ class SearchResult : Fragment() {
 
                     // fetch the img to display
                     val imagePoster = view.findViewById<ImageView>(R.id.movieImg)
-                    imagePoster.setImageBitmap(bitmap)
+                    activity?.runOnUiThread {
+                        imagePoster.setImageBitmap(bitmap)
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

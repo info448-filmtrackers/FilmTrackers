@@ -7,8 +7,9 @@
     android:padding="25dp"
     tools:context=".MovieHistoryFragment">
 
+
     <LinearLayout
-        android:id="@+id/searchTitle"
+        android:id="@+id/Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -25,26 +26,66 @@
     </LinearLayout>
 
 
-
-    <ScrollView
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="15dp"
-        android:layout_marginTop="55dp"
-        app:layout_constraintTop_toBottomOf="@id/searchTitle"
-        tools:layout_editor_absoluteX="16dp">
+        android:layout_height="180dp"
+        android:layout_marginVertical="40dp"
+        android:layout_marginTop="185dp"
+        app:layout_constraintTop_toBottomOf="@id/Title"
+        android:paddingVertical="10dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/movieImg"
+            style="@style/Style.App.circleImageView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/placeholder_movie" />
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include
-                layout="@layout/fragment_movie_card"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginRight="40dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/movieTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/unbounded"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Avatar kasldjf alskdjf al alsdkjfalksdj f"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/movieRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="\???" />
+            </LinearLayout>
+
+            <TextView
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:id="@+id/movieDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="lorem ipsum alskdjf a sfdkjl alksdj  asdklfj alksdjf asldkjf alksd fjlaskdj fklasj dfklj aslkdfj lkasjd fklasj dfkljaskldf jklasjdflkajsldkfjalksdfj lkasjdflkajslkdfjakls jdflkajsldkfjalks djflkas jdfl" />
 
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+

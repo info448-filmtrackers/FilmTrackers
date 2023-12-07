@@ -67,6 +67,7 @@ class SearchResult : Fragment() {
             navigateToFragment(addMovieFragment)
         }
 
+        Log.i("IMG", imgUrl.toString())
         if (imgUrl != null) {
             val executor: Executor = Executors.newSingleThreadExecutor()
             executor.execute {

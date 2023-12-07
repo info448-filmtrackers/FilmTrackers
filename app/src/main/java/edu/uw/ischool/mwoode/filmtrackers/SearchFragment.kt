@@ -39,12 +39,10 @@ class SearchFragment : Fragment() {
     private var tasksShown: Boolean = false
     private var searchInProg: TimerTask? = null
     private var filters: Array<String> = arrayOf("Popular", "Niche", "Highly Rated", "Foreign")
-    private var selectedFilters: ArrayList<String> = arrayListOf()
+    private val selectedFilters: ArrayList<String> = arrayListOf()
     private var lastSearch: JSONArray? = null
     private var filterButtons: ArrayList<FilterButton> = arrayListOf()
     private var genreFilters: HashMap<Int, String> = hashMapOf<Int, String>()
-    private val previousSearchResults: HashSet<SearchResult> = hashSetOf()
-    private var currSearchQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +52,6 @@ class SearchFragment : Fragment() {
 //            param2 = it.getString(ARG_PARAM2)
 //        }
     }
-
 
     // Searches tmdb for matches
     fun search(query: String) {
@@ -72,83 +69,39 @@ class SearchFragment : Fragment() {
             val response = client.newCall(request).execute()
             val check = JSONObject(response.body()?.string())["results"]
             lastSearch = JSONArray(check.toString())
-
             displaySearchResults(JSONArray(check.toString()))
         }
     }
 
-    fun removePreviousSearches() {
-        for (searchResult in previousSearchResults) {
-            childFragmentManager.beginTransaction().remove(searchResult).commit()
-//            previousSearchResults.remove(searchResult)
-        }
-        previousSearchResults.clear()
-    }
-
-//    override fun onStop() {
-//        super.onStop()
-//        selectedFilters = arrayListOf()
-//        lastSearch = null
-//        filterButtons = arrayListOf()
-//    }
-
     fun displaySearchResults(searchResults: JSONArray) {
-        Log.i("FILTER", "Results to be shown: "+ searchResults.length())
+        Log.i("SEARCH", searchResults.toString())
+        Log.i("FILTER", "SEARCH RESULTS UPDATED")
+
         activity?.runOnUiThread {
-            Log.i("FILTER_RES", "CLEARING")
-//            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
-            removePreviousSearches()
+            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
+//            view?.findViewById<FlexboxLayout>(R.id.filtersHolder)?.removeAllViews()
         }
+
 
         for (i in 0 until searchResults.length()) {
             val movieData = searchResults.getJSONObject(i)
             val backdropPath = movieData.getString("poster_path")
 
-            var shouldBeIncluded = true
+            val movieDataFragment = SearchResult.newInstance(
+                movieData.getString("title"),
+                movieData.getString("overview"),
+                movieData.getDouble("vote_average"),
+                movieData.getInt("id"),
+                IMG_BASE_URL + backdropPath
+            )
 
-            for (k in 0 until selectedFilters.size) {
-                when (selectedFilters[k]) {
-                    "Popular" -> shouldBeIncluded =
-                        (movieData.getDouble("popularity")) > 100
+            val fragmentManager = childFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.add(R.id.searchResultsHolder, movieDataFragment)
 
-                    "Niche" -> shouldBeIncluded =
-                        (movieData.getDouble("popularity")) < 150
-
-                    "Highly Rated" -> shouldBeIncluded =
-                        (movieData.getDouble("vote_average") >= 5)
-
-                    "Foreign" -> shouldBeIncluded =
-                        (movieData.getString("original_language") != "en")
-                }
-
-                Log.i("FILTER", "EXAMINE FILTER: " + selectedFilters[k])
-
-                if (!shouldBeIncluded) {
-                    break;
-                }
-            }
-
-            if (shouldBeIncluded) {
-                Log.i("FILTER", "Appending movie to page: " + movieData.getString("title"))
-                val movieDataFragment = SearchResult.newInstance(
-                    movieData.getString("title"),
-                    movieData.getString("overview"),
-                    movieData.getDouble("vote_average"),
-                    movieData.getInt("id"),
-                    IMG_BASE_URL + backdropPath
-                )
-
-                val fragmentManager = childFragmentManager
-                val transaction = fragmentManager.beginTransaction()
-                transaction.add(R.id.searchResultsHolder, movieDataFragment)
-
-                // Commit the transaction
-                transaction.commit()
-                previousSearchResults.add(movieDataFragment)
-            }
+            // Commit the transaction
+            transaction.commit()
         }
-        Log.i("FILTER_RES", "Added")
-        Log.i("FILTER", "Finished logging")
     }
 
 
@@ -157,22 +110,11 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        activity?.runOnUiThread {
-            view?.findViewById<FlexboxLayout>(R.id.filtersHolder)?.removeAllViews()
-        }
+        val timer = Timer()
 
         val root = inflater.inflate(R.layout.fragment_search, container, false);
-
-
-        return root;
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val timer = Timer()
         // search functionality
-        val searchInput = view.findViewById<EditText>(R.id.searchBar)
+        val searchInput = root.findViewById<EditText>(R.id.searchBar)
 
         searchInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -186,12 +128,11 @@ class SearchFragment : Fragment() {
                 searchInProg?.cancel()
                 searchInProg = object : TimerTask() {
                     override fun run() {
-                        currSearchQuery = searchTerm
                         search(searchTerm)
                     }
                 }
 
-                timer.schedule(searchInProg, 1000)
+                timer.schedule(searchInProg, 2000)
             }
         })
 
@@ -209,10 +150,12 @@ class SearchFragment : Fragment() {
         }
 
         // open filters functionality
-        val filterButton = view.findViewById<RelativeLayout>(R.id.filterHolder)
+        val filterButton = root.findViewById<RelativeLayout>(R.id.filterHolder)
         filterButton.setOnClickListener {
             toggleFilters()
         }
+
+        return root;
     }
 
     override fun onStart() {
@@ -232,50 +175,38 @@ class SearchFragment : Fragment() {
                 }
 
                 Log.i("FILTER", filters[i])
-                search(currSearchQuery)
                 // display search result
                 val filteredSearchResults = arrayListOf<JSONObject>();
+                if (lastSearch != null) {
+                    for (j in 0 until lastSearch!!.length()) {
+                        val currSearchResult = lastSearch!!.getJSONObject(j)
+                        var shouldBeIncluded = true
 
-//                if (lastSearch != null) {
-//                    for (j in 0 until lastSearch!!.length()) {
-//                        val currSearchResult = lastSearch!!.getJSONObject(j)
-//                        var shouldBeIncluded = true
-//
-//                        for (k in 0 until selectedFilters.size) {
-//                            when (selectedFilters[k]) {
-//                                "Popular" -> shouldBeIncluded =
-//                                    (currSearchResult.getDouble("popularity")) > 100
-//
-//                                "Niche" -> shouldBeIncluded =
-//                                    (currSearchResult.getDouble("popularity")) < 150
-//
-//                                "Highly Rated" -> shouldBeIncluded =
-//                                    (currSearchResult.getDouble("vote_average") >= 5)
-//
-//                                "Foreign" -> shouldBeIncluded =
-//                                    (currSearchResult.getString("original_language") != "en")
-//                            }
-//
-//                            Log.i("FILTER", "EXAMINE FILTER: " + selectedFilters[k])
-//
-//                            if (!shouldBeIncluded) {
-//                                break;
-//                            }
-//                        }
-//
-//                        if (shouldBeIncluded) {
-//                            Log.i(
-//                                "INFO",
-//                                "Including movie: " + currSearchResult.getString("title")
-//                            )
-//                            filteredSearchResults.add(currSearchResult)
-//                        }
-//                    }
-//
-//                    activity?.runOnUiThread {
-//                        displaySearchResults(JSONArray(filteredSearchResults.toString()))
-//                    }
-//                }
+                        Log.i("FILTER", currSearchResult.toString())
+                        Log.i("FILTER", selectedFilters.toString())
+                        for (k in 0 until selectedFilters.size) {
+                            when (selectedFilters[k]) {
+                                "Popular" -> shouldBeIncluded = (currSearchResult.getDouble("popularity")) > 100
+                                "Niche" -> shouldBeIncluded = (currSearchResult.getDouble("popularity")) < 150
+                                "Highly Rated" -> shouldBeIncluded = (currSearchResult.getDouble("vote_average") >= 5)
+                                "Foreign" -> shouldBeIncluded = (currSearchResult.getString("original_language") != "en")
+                            }
+
+                            Log.i("FILTER", "EXAMINE FILTER: " + selectedFilters[k])
+
+                            if (!shouldBeIncluded) {
+                                break;
+                            }
+                        }
+
+                        if (shouldBeIncluded) {
+                            filteredSearchResults.add(currSearchResult)
+                        }
+                    }
+                }
+
+
+                displaySearchResults(JSONArray(filteredSearchResults))
             }
             btn.onClick(addToList)
         }

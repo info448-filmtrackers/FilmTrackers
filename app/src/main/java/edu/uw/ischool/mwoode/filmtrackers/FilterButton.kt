@@ -23,8 +23,8 @@ private const val TITLE = "title"
 class FilterButton : Fragment() {
     // TODO: Rename and change types of parameters
     private var title: String? = null;
-    private lateinit var button: Button;
     private var selected: Boolean = false;
+    private lateinit var button: Button;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +35,13 @@ class FilterButton : Fragment() {
 
     fun onClick(callback: () -> Unit) {
         button.setOnClickListener{
-            activity?.runOnUiThread {
-                selected = !selected
-                if (selected) {
-                    button.background.setTint(Color.BLACK)
-                } else {
-                    button.background.setTint(Color.rgb(94, 63, 186))
-                }
+            selected = !selected
+            if (selected) {
+                button.background.setTint(Color.BLACK)
+            } else {
+                button.background.setTint(Color.rgb(255, 0, 255))
             }
             callback()
-
         }
     }
 

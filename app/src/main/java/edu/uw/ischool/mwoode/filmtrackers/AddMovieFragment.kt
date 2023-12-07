@@ -130,11 +130,11 @@ class AddMovieFragment : Fragment() {
     }
 
     private fun updateMovieCard() {
-        if (!isOnline()) {
+        if (!((activity as MainActivity).isOnline())) {
             Toast.makeText(
                 activity,
                 "You are currently offline and you have no access to the internet. Please check your connection.",
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_SHORT).show()
         } else {
             val executor: Executor = Executors.newSingleThreadExecutor()
             executor.execute {
@@ -227,14 +227,6 @@ class AddMovieFragment : Fragment() {
             fileWriter.write("[]")
             fileWriter.close()
         }
-    }
-
-    private fun isOnline(): Boolean {
-        val connectivityManager =
-            activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val activeNetwork = connectivityManager?.activeNetwork
-        val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
-        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
     private fun resetFields() {

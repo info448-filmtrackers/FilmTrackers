@@ -39,7 +39,7 @@ class FilterButton : Fragment() {
             if (selected) {
                 button.background.setTint(Color.BLACK)
             } else {
-                button.background.setTint(Color.rgb(255, 0, 255))
+                button.background.setTint(Color.rgb(94, 63, 186))
             }
             callback()
         }

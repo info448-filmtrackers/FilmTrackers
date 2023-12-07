@@ -79,7 +79,8 @@ class SearchFragment : Fragment() {
 
         activity?.runOnUiThread {
             view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
-//            view?.findViewById<FlexboxLayout>(R.id.filtersHolder)?.removeAllViews()
+            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.GONE
+            // view?.findViewById<FlexboxLayout>(R.id.filtersHolder)?.removeAllViews()
         }
 
 
@@ -102,6 +103,8 @@ class SearchFragment : Fragment() {
             // Commit the transaction
             transaction.commit()
         }
+
+        view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.VISIBLE
     }
 
 

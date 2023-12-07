@@ -9,5 +9,6 @@ const val USER_DATA_FILE = "user_movie_data.json"
 
 // FRAGMENT PARAM CONSTANTS
 const val MOVIE_ID_PARAM = "movieIdParam"
+const val ADD_MOVIE_FRAGMENT_ID_PARAM = "addMovieFragmentId"
 
 data class UserReview(var movieId: Int, var liked: Boolean, var dateWatched: String, var review: String)

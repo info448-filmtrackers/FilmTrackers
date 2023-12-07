@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import okhttp3.OkHttpClient
@@ -57,8 +58,8 @@ class SearchResult : Fragment() {
         val ratingTextView = view.findViewById<TextView>(R.id.movieRating)
         ratingTextView.text = "$rating/10"
 
-        val descriptionTextView = view.findViewById<TextView>(R.id.movieDescription)
-        descriptionTextView.text = description
+//        val descriptionTextView = view.findViewById<TextView>(R.id.movieDescription)
+//        descriptionTextView.text = description
 
         // Moves to add movie page
         val addMovieButton = view.findViewById<ImageView>(R.id.addButton)
@@ -91,6 +92,13 @@ class SearchResult : Fragment() {
                         activity?.runOnUiThread {
                             if (bitmap != null) {
                                 imagePoster.setImageBitmap(bitmap)
+                            }
+
+                            val readMore = view?.findViewById<Button>(R.id.readMoreButton)
+
+                            readMore?.setOnClickListener {
+                                val detailedFragment = DetailedFragment.newInstance(movieIdParam, id)
+                                navigateToFragment(detailedFragment)
                             }
                         }
                     } catch (e: Exception) {

@@ -52,14 +52,12 @@
                     android:text="\???" />
             </LinearLayout>
 
-            <TextView
-                android:ellipsize="end"
-                android:maxLines="4"
-                android:id="@+id/movieDescription"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/readMoreButton"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="lorem ipsum alskdjf a sfdkjl alksdj  asdklfj alksdjf asldkjf alksd fjlaskdj fklasj dfklj aslkdfj lkasjd fklasj dfkljaskldf jklasjdflkajsldkfjalksdfj lkasjdflkajslkdfjakls jdflkajsldkfjalks djflkas jdfl" />
+                android:layout_gravity="center"
+                android:text="Read More" />
 
         </LinearLayout>
     </LinearLayout>

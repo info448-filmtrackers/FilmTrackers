@@ -2,7 +2,6 @@ package edu.uw.ischool.mwoode.filmtrackers
 
 
 
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -68,8 +67,6 @@ class MovieHistoryFragment : Fragment() {
     private lateinit var imagePoster: ImageView
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -95,17 +92,10 @@ class MovieHistoryFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movie_history, container, false)
 
-        // Initialize the UI elements once
-//        titleTextView = view.findViewById(R.id.movieTitle) as TextView
-//        ratingTextView = view.findViewById(R.id.movieRating) as TextView
-//        descriptionTextView = view.findViewById(R.id.movieDescription) as TextView
-//        imagePoster = view.findViewById(R.id.movieImg) as ImageView
-
-
         // display all movies
         readUserMovieData(requireActivity().filesDir.path + "/user_movie_data.json")?.let { userMovieDataList ->
-            for (movieData in userMovieDataList) {
-                updateMovie(movieData)
+            for (movieInfo in userMovieDataList) {
+                updateMovie(movieInfo)
             }
         }
         return view
@@ -159,7 +149,6 @@ class MovieHistoryFragment : Fragment() {
 
 
                 // fetch data
-                val rating = (movieData["vote_average"] as Double).toInt()
                 val backdropPath = movieData.getString("poster_path")
 
 
@@ -170,23 +159,14 @@ class MovieHistoryFragment : Fragment() {
                         movieData.getString("overview"),
                         movieData.getDouble("vote_average"),
                         movieData.getInt("id"),
-                        IMG_BASE_URL + backdropPath
-
-
-//                        imagePoster.setImageBitmap(bitmap)
-//                                titleTextView.text = movieData["title"].toString()
-//                                ratingTextView.text = "Rating: $rating/10"
-//                                descriptionTextView.text = movieData["tagline"].toString()
-//
-//                        val fragmentManager = childFragmentManager
-//                    val transaction = fragmentManager.beginTransaction()
-//                    transaction.add(R.id.searchResultsHolder, historyFragment)
-//                     Commit the transaction
-//                    transaction.commit()
+                        IMG_BASE_URL + backdropPath,
+                        movieInfo.review,
+                        movieInfo.liked,
+                        movieInfo.dateWatched
                     )
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
-                    transaction.add(R.id.searchResultsHolder, historyFragment)
+                    transaction.add(R.id.movieListHolder, historyFragment)
 
                     // Commit the transaction
                     transaction.commit()
@@ -195,11 +175,6 @@ class MovieHistoryFragment : Fragment() {
             }
         }
     }
-
-
-
-
-
 
 
 
@@ -228,18 +203,6 @@ class MovieHistoryFragment : Fragment() {
     }
 
 
-    private fun ensureUserDataFileExists(filePath: String) {
-        val file = File(filePath)
-        if (!file.exists()) {
-            val fileWriter = FileWriter(filePath)
-            fileWriter.write("[]")
-            fileWriter.close()
-        }
-    }
-
-
-
-
     private fun isOnline(): Boolean {
         val connectivityManager =
             activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
@@ -247,8 +210,6 @@ class MovieHistoryFragment : Fragment() {
         val capabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
         return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
-
-
 
 
     companion object {

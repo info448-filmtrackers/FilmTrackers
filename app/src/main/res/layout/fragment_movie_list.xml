@@ -50,22 +50,22 @@
 
 
                 <TextView
-                    android:id="@+id/movieRating"
+                    android:id="@+id/date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="\???" />
+                    android:text="" />
             </LinearLayout>
 
 
             <TextView
                 android:ellipsize="end"
                 android:maxLines="4"
-                android:id="@+id/movieDescription"
+                android:id="@+id/userReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="lorem ipsum alskdjf a sfdkjl alksdj  asdklfj alksdjf asldkjf alksd fjlaskdj fklasj dfklj aslkdfj lkasjd fklasj dfkljaskldf jklasjdflkajsldkfjalksdfj lkasjdflkajslkdfjakls jdflkajsldkfjalks djflkas jdfl" />
+                android:text="" />
 
 
         </LinearLayout>

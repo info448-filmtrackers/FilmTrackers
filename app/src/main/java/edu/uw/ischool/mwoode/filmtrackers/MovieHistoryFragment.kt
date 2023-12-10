@@ -166,7 +166,6 @@ class MovieHistoryFragment : Fragment() {
                 // Display movie information in UI
                 activity?.runOnUiThread {
                     val historyFragment = MovieList.newInstance(
-
                         movieData.getString("title"),
                         movieData.getString("overview"),
                         movieData.getDouble("vote_average"),
@@ -185,6 +184,12 @@ class MovieHistoryFragment : Fragment() {
 //                     Commit the transaction
 //                    transaction.commit()
                     )
+                    val fragmentManager = childFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.add(R.id.searchResultsHolder, historyFragment)
+
+                    // Commit the transaction
+                    transaction.commit()
 
                 }
             }

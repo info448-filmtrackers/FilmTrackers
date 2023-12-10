@@ -1,6 +1,8 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
 
+
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -45,7 +47,6 @@ import android.text.style.ImageSpan
 import edu.uw.ischool.mwoode.filmtrackers.UserMovieData
 
 
-
 private const val TAG = "MovieHistoryFragment"
 
 
@@ -57,8 +58,6 @@ data class UserMovieData(
 )
 
 
-
-
 class MovieHistoryFragment : Fragment() {
 
 
@@ -67,7 +66,6 @@ class MovieHistoryFragment : Fragment() {
     private lateinit var ratingTextView: TextView
     private lateinit var descriptionTextView: TextView
     private lateinit var imagePoster: ImageView
-    private lateinit var movieInfoTextView: TextView
 
 
 
@@ -75,15 +73,20 @@ class MovieHistoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Check if the movieIdParam is present in the arguments
+        // Check if movieIdParam is present in the arguments
         movieIdParam = arguments?.getInt(MOVIE_ID_PARAM)
 
-        // If movieIdParam is still null, set it to a default value (e.g., 221)
         if (movieIdParam == null) {
-            movieIdParam = 223
+            val filePath = requireActivity().filesDir.path + "/user_movie_data.json"
+            readUserMovieData(filePath)?.let { userMovieDataList ->
+                // Set movieIdParam to the movieId from the first object in the array
+                movieIdParam = userMovieDataList.firstOrNull()?.movieId
+
+                // If movieIdParam is still null, set it to a default value (e.g., 221)
+                movieIdParam = movieIdParam ?: 388
+            }
         }
     }
-
 
 
     override fun onCreateView(
@@ -92,30 +95,27 @@ class MovieHistoryFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movie_history, container, false)
 
-
         // Initialize the UI elements once
-        titleTextView = view.findViewById(R.id.movieTitle) as TextView
-        ratingTextView = view.findViewById(R.id.movieRating) as TextView
-        descriptionTextView = view.findViewById(R.id.movieDescription) as TextView
-        imagePoster = view.findViewById(R.id.movieImg) as ImageView
-        movieInfoTextView = view.findViewById(R.id.movieInfoTextView)
+//        titleTextView = view.findViewById(R.id.movieTitle) as TextView
+//        ratingTextView = view.findViewById(R.id.movieRating) as TextView
+//        descriptionTextView = view.findViewById(R.id.movieDescription) as TextView
+//        imagePoster = view.findViewById(R.id.movieImg) as ImageView
 
 
-        val filePath = requireActivity().getFilesDir().getPath().toString() + "/user_movie_data.json"
-        val userMovieData = readUserMovieData(filePath)
-        if (userMovieData != null) {
-            updateMovie(userMovieData)
+        // display all movies
+        readUserMovieData(requireActivity().filesDir.path + "/user_movie_data.json")?.let { userMovieDataList ->
+            for (movieData in userMovieDataList) {
+                updateMovie(movieData)
+            }
         }
         return view
     }
 
 
 
-    private fun updateMovie(userMovieData: UserMovieData) {
-        val movieId = userMovieData.movieId
-        val movieReview = userMovieData.review
-        val movieRating = userMovieData.liked
 
+    private fun updateMovie(movieInfo: UserMovieData) {
+        val movieId = movieInfo.movieId
 
         if (!isOnline()) {
             Toast.makeText(
@@ -145,36 +145,47 @@ class MovieHistoryFragment : Fragment() {
 
 
                 // get img from api
-                val movieImgRequest = Request.Builder()
-                    .url("$IMG_BASE_URL/${movieData["poster_path"]}")
-                    .get()
-                    .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer $BEARER_TOKEN")
-                    .build()
-
-
-                val movieImgResponse = client.newCall(movieImgRequest).execute()
-                val bitmap =
-                    BitmapFactory.decodeStream(movieImgResponse.body()?.source()?.inputStream())
+//                val movieImgRequest = Request.Builder()
+//                    .url("$IMG_BASE_URL/${movieData["poster_path"]}")
+//                    .get()
+//                    .addHeader("accept", "application/json")
+//                    .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+//                    .build()
+//
+//
+//                val movieImgResponse = client.newCall(movieImgRequest).execute()
+//                val bitmap =
+//                    BitmapFactory.decodeStream(movieImgResponse.body()?.source()?.inputStream())
 
 
                 // fetch data
                 val rating = (movieData["vote_average"] as Double).toInt()
+                val backdropPath = movieData.getString("poster_path")
 
 
                 // Display movie information in UI
                 activity?.runOnUiThread {
-                    imagePoster.setImageBitmap(bitmap)
-                    titleTextView.text = movieData["title"].toString()
-                    if (movieRating) {
-                        ratingTextView.text = "Liked"
-                    } else {
-                        ratingTextView.text = "Displiked"
-                    }
-//                    ratingTextView.text = "Rating: $rating/10"
-                    descriptionTextView.text = movieReview
-//                    val movieInfoString = "${movieData["title"]}, Rating: $rating/10\n${movieData["tagline"]}\n\n"
-//                    movieInfoTextView.append(movieInfoString)
+                    val historyFragment = MovieList.newInstance(
+
+                        movieData.getString("title"),
+                        movieData.getString("overview"),
+                        movieData.getDouble("vote_average"),
+                        movieData.getInt("id"),
+                        IMG_BASE_URL + backdropPath
+
+
+//                        imagePoster.setImageBitmap(bitmap)
+//                                titleTextView.text = movieData["title"].toString()
+//                                ratingTextView.text = "Rating: $rating/10"
+//                                descriptionTextView.text = movieData["tagline"].toString()
+//
+//                        val fragmentManager = childFragmentManager
+//                    val transaction = fragmentManager.beginTransaction()
+//                    transaction.add(R.id.searchResultsHolder, historyFragment)
+//                     Commit the transaction
+//                    transaction.commit()
+                    )
+
                 }
             }
         }
@@ -183,7 +194,11 @@ class MovieHistoryFragment : Fragment() {
 
 
 
-    private fun readUserMovieData(filePath: String): UserMovieData? {
+
+
+
+
+    private fun readUserMovieData(filePath: String): List<UserMovieData>? {
         try {
             val file = File(filePath)
             if (file.exists()) {
@@ -194,10 +209,10 @@ class MovieHistoryFragment : Fragment() {
                 val arrayType = object : TypeToken<List<UserMovieData>>() {}.type
                 val userMovieDataList: List<UserMovieData> = gson.fromJson(fileReader, arrayType)
 
+
                 // Check if the array is not empty
                 if (userMovieDataList.isNotEmpty()) {
-                    // Return the first element in the list
-                    return userMovieDataList[0]
+                    return userMovieDataList
                 }
             }
         } catch (e: Exception) {
@@ -208,39 +223,6 @@ class MovieHistoryFragment : Fragment() {
     }
 
 
-
-
-//    private fun readUserMovieData(filePath: String): List<UserMovieData>? {
-//        try {
-//            val file = File(filePath)
-//            if (file.exists()) {
-//                val fileReader = FileReader(file)
-//                val gson = Gson()
-//
-//
-//                // Read the JSON array from the file
-//                val arrayType = object : TypeToken<List<UserMovieData>>() {}.type
-//                val userMovieDataList: List<UserMovieData> = gson.fromJson(fileReader, arrayType)
-//
-//
-//                // Check if the array is not empty
-//                if (userMovieDataList.isNotEmpty()) {
-//                    return userMovieDataList
-//                }
-//            }
-//        } catch (e: Exception) {
-//            Log.e(TAG, "Error reading user_movie_data.json", e)
-//        }
-//
-//
-//        return null
-//    }
-
-
-
-
-
-
     private fun ensureUserDataFileExists(filePath: String) {
         val file = File(filePath)
         if (!file.exists()) {
@@ -249,6 +231,8 @@ class MovieHistoryFragment : Fragment() {
             fileWriter.close()
         }
     }
+
+
 
 
     private fun isOnline(): Boolean {

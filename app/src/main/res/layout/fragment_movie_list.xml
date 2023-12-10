@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:paddingVertical="10dp">
+
+
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:paddingVertical="10dp">
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/movieImg"
+            style="@style/Style.App.circleImageView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/no_movie_placeholder" />
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/movieTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/unbounded"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Movie Title"
+                    android:textSize="20dp" />
+
+
+                <TextView
+                    android:id="@+id/movieRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="\???" />
+            </LinearLayout>
+
+
+            <TextView
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:id="@+id/movieDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="lorem ipsum alskdjf a sfdkjl alksdj  asdklfj alksdjf asldkjf alksd fjlaskdj fklasj dfklj aslkdfj lkasjd fklasj dfkljaskldf jklasjdflkajsldkfjalksdfj lkasjdflkajslkdfjakls jdflkajsldkfjalks djflkas jdfl" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/likeButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

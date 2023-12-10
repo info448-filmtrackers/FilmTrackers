@@ -22,6 +22,9 @@ private const val TITLE = "originalTitle"
 private const val DESC = "description"
 private const val RATING = "rating"
 private const val IMG = "imgUrl"
+private const val REVIEW = "review"
+private const val LIKED = "liked"
+private const val DATE = "dateWatched"
 
 
 /**
@@ -35,6 +38,9 @@ class MovieList : Fragment() {
     private var rating: Double? = null
     private var imgUrl: String? = null
     private var movieIdParam: Int = -1
+    private var review: String? = null
+    private var liked: Boolean? = true
+    private var dateWatched: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +51,9 @@ class MovieList : Fragment() {
             rating = it.getDouble(RATING)
             imgUrl = it.getString(IMG)
             movieIdParam = it.getInt(MOVIE_ID_PARAM)
+            review = it.getString(REVIEW)
+            liked = it.getBoolean(LIKED)
+            dateWatched = it.getString(DATE)
         }
     }
 
@@ -62,11 +71,20 @@ class MovieList : Fragment() {
 
 
         val ratingTextView = view.findViewById<TextView>(R.id.movieRating)
-        ratingTextView.text = "$rating/10"
+//        ratingTextView.text = "$rating/10"
+        ratingTextView.text = "Date Watched: $dateWatched"
 
 
         val descriptionTextView = view.findViewById<TextView>(R.id.movieDescription)
-        descriptionTextView.text = description
+        descriptionTextView.text = "Your Review: $review"
+
+        val likedButton = view.findViewById<ImageView>(R.id.likeButton)
+       if (liked == true){
+           likedButton.setImageResource(R.drawable.like_unselected)
+       } else {
+           likedButton.setImageResource(R.drawable.dislike_unselected)
+       }
+
 
         if (((activity as MainActivity).isOnline())) {
             Log.i("IMG", imgUrl.toString())
@@ -124,7 +142,10 @@ class MovieList : Fragment() {
                         description: String,
                         rating: Double,
                         id: Int,
-                        imgUrl: String) =
+                        imgUrl: String,
+                        review: String,
+                        liked: Boolean,
+                        dateWatched: String) =
             MovieList().apply {
                 arguments = Bundle().apply {
                     putString(TITLE, title)
@@ -132,6 +153,9 @@ class MovieList : Fragment() {
                     putDouble(RATING, rating)
                     putInt(MOVIE_ID_PARAM, id)
                     putString(IMG, imgUrl)
+                    putString(REVIEW, review)
+                    putBoolean(LIKED, liked)
+                    putString(DATE, dateWatched)
                 }
             }
     }

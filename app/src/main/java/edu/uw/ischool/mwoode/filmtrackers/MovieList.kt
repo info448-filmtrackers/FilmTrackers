@@ -70,13 +70,13 @@ class MovieList : Fragment() {
         titleTextView.text = originalTitle
 
 
-        val ratingTextView = view.findViewById<TextView>(R.id.movieRating)
-//        ratingTextView.text = "$rating/10"
-        ratingTextView.text = "Date Watched: $dateWatched"
+        val dateTextView = view.findViewById<TextView>(R.id.date)
+        dateTextView.text = "Date Watched: $dateWatched"
 
 
-        val descriptionTextView = view.findViewById<TextView>(R.id.movieDescription)
-        descriptionTextView.text = "Your Review: $review"
+        val reviewTextView = view.findViewById<TextView>(R.id.userReview)
+        reviewTextView.text = "Your Review: $review"
+
 
         val likedButton = view.findViewById<ImageView>(R.id.likeButton)
        if (liked == true){
@@ -111,7 +111,6 @@ class MovieList : Fragment() {
                             if (bitmap != null) {
                                 imagePoster.setImageBitmap(bitmap)
                             }
-
 
                         }
                     } catch (e: Exception) {

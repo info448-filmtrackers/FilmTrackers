@@ -149,7 +149,6 @@ class MovieHistoryFragment : Fragment() {
 
 
                 // fetch data
-                val rating = (movieData["vote_average"] as Double).toInt()
                 val backdropPath = movieData.getString("poster_path")
 
 
@@ -167,7 +166,7 @@ class MovieHistoryFragment : Fragment() {
                     )
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
-                    transaction.add(R.id.searchResultsHolder, historyFragment)
+                    transaction.add(R.id.movieListHolder, historyFragment)
 
                     // Commit the transaction
                     transaction.commit()

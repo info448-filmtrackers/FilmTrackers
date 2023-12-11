@@ -1,6 +1,5 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
-import android.R.attr.button
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -84,7 +82,6 @@ class SearchFragment : Fragment() {
 
         activity?.runOnUiThread {
             view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
-            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.GONE
 
             for (i in 0 until searchResults.length()) {
                 val movieData = searchResults.getJSONObject(i)
@@ -118,8 +115,7 @@ class SearchFragment : Fragment() {
     ): View? {
         val timer = Timer()
 
-        val root = inflater.inflate(R.layout.fragment_search, container, false);
-
+        val root = inflater.inflate(R.layout.fragment_search, container, false)
 
         // search functionality
         val searchInput = root.findViewById<EditText>(R.id.searchBar)
@@ -236,6 +232,12 @@ class SearchFragment : Fragment() {
             }
             btn.onClick(addToList)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.GONE
     }
 
     private fun toggleFilters() {

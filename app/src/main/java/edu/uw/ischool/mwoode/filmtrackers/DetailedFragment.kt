@@ -173,7 +173,9 @@ class DetailedFragment : Fragment() {
                 }
 
                 activity?.runOnUiThread {
-                    movieImage.setImageBitmap(bitmap)
+                    if (bitmap != null) {
+                        movieImage.setImageBitmap(bitmap)
+                    }
                     movieTitle.text = movieData["title"].toString()
                     movieRating.text = "Rating: $rating/10"
                     movieDate.text = "Release Date: " + movieData["release_date"].toString()

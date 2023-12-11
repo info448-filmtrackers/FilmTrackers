@@ -166,6 +166,7 @@ class DetailedFragment : Fragment() {
                     when (crewMember.getString("job")) {
                         "Director" -> directorList.add(crewMember.getString("name"))
                         "Screenplay" -> writerList.add(crewMember.getString("name"))
+                        "Writer" -> writerList.add(crewMember.getString("name"))
                         "Producer" -> producerList.add(crewMember.getString("name"))
                         "Editor" -> editorList.add(crewMember.getString("name"))
                     }

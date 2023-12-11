@@ -43,6 +43,7 @@ import android.graphics.drawable.Drawable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ImageSpan
+import android.widget.LinearLayout
 import edu.uw.ischool.mwoode.filmtrackers.UserMovieData
 
 
@@ -91,6 +92,9 @@ class MovieHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movie_history, container, false)
+
+        // Clear existing views
+        view.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
 
         // display all movies
         readUserMovieData(requireActivity().filesDir.path + "/user_movie_data.json")?.let { userMovieDataList ->
@@ -154,6 +158,9 @@ class MovieHistoryFragment : Fragment() {
 
                 // Display movie information in UI
                 activity?.runOnUiThread {
+//                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
+//                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.GONE
+
                     val historyFragment = MovieList.newInstance(
                         movieData.getString("title"),
                         movieData.getString("overview"),
@@ -166,11 +173,17 @@ class MovieHistoryFragment : Fragment() {
                     )
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
-                    transaction.add(R.id.movieListHolder, historyFragment)
 
-                    // Commit the transaction
-                    transaction.commit()
+                    if (!fragmentManager.isStateSaved) {
+                        transaction.add(R.id.movieListHolder, historyFragment)
 
+                        // Commit the transaction only if the state is not saved
+                        transaction.commit()
+                    } else {
+                        Log.w(TAG, "Fragment state is saved. Fragment transaction not committed.")
+                    }
+
+//                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.VISIBLE
                 }
             }
         }

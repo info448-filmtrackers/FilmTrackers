@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="380dp"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:paddingVertical="10dp">
 
     <!--  Made up of placeholder data, need to populate with actual data from the API  -->
@@ -16,13 +16,14 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/movieTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="240dp"
             android:layout_marginBottom="5dp"
             android:text="Movie Title"
             android:textSize="20dp"

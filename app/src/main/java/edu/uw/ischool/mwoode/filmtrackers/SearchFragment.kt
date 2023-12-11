@@ -41,6 +41,7 @@ class SearchFragment : Fragment() {
     private val selectedFilters: ArrayList<String> = arrayListOf()
     private var lastSearch: JSONArray? = null
     private var filterButtons: ArrayList<FilterButton> = arrayListOf()
+    private var prevQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,21 +54,38 @@ class SearchFragment : Fragment() {
 
     // Searches tmdb for matches
     fun search(query: String) {
-        val executor: Executor = Executors.newSingleThreadExecutor()
-        executor.execute {
-            val client = OkHttpClient()
+        if (!((activity as MainActivity).isOnline())) {
+            activity?.runOnUiThread {
+                Toast.makeText(
+                    activity,
+                    "You are currently offline and you have no access to the internet. Please check your connection.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            if (prevQuery == query) {
+                activity?.runOnUiThread {
+                    view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.VISIBLE
+                }
+            } else {
+                val executor: Executor = Executors.newSingleThreadExecutor()
+                executor.execute {
+                    val client = OkHttpClient()
 
-            val request = Request.Builder()
-                .url(getString(R.string.search_url, query)) // args: search query
-                .get()
-                .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Bearer $BEARER_TOKEN")
-                .build()
+                    val request = Request.Builder()
+                        .url(getString(R.string.search_url, query)) // args: search query
+                        .get()
+                        .addHeader("accept", "application/json")
+                        .addHeader("Authorization", "Bearer $BEARER_TOKEN")
+                        .build()
 
-            val response = client.newCall(request).execute()
-            val check = JSONObject(response.body()?.string())["results"]
-            lastSearch = JSONArray(check.toString())
-            displaySearchResults(JSONArray(check.toString()))
+                    val response = client.newCall(request).execute()
+                    val check = JSONObject(response.body()?.string())["results"]
+                    lastSearch = JSONArray(check.toString())
+                    displaySearchResults(JSONArray(check.toString()))
+                }
+
+                prevQuery = query
+            }
         }
     }
 
@@ -81,7 +99,14 @@ class SearchFragment : Fragment() {
         Log.i("FILTER", "SEARCH RESULTS UPDATED")
 
         activity?.runOnUiThread {
-            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
+//            view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.removeAllViews()
+            val searchResultsHolder = view?.findViewById<LinearLayout>(R.id.searchResultsHolder)
+            for (i in 0 until searchResultsHolder?.childCount!!) {
+                val searchResult = childFragmentManager.findFragmentByTag("search_result_$i")
+                if (searchResult != null) {
+                    childFragmentManager.beginTransaction().remove(searchResult).commit()
+                }
+            }
 
             for (i in 0 until searchResults.length()) {
                 val movieData = searchResults.getJSONObject(i)
@@ -97,7 +122,7 @@ class SearchFragment : Fragment() {
 
                 val fragmentManager = childFragmentManager
                 val transaction = fragmentManager.beginTransaction()
-                transaction.add(R.id.searchResultsHolder, movieDataFragment)
+                transaction.add(R.id.searchResultsHolder, movieDataFragment, "search_result_$i")
 
                 // Commit the transaction
                 transaction.commit()
@@ -128,22 +153,15 @@ class SearchFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!((activity as MainActivity).isOnline())) {
-                    Toast.makeText(
-                        activity,
-                        "You are currently offline and you have no access to the internet. Please check your connection.",
-                        Toast.LENGTH_SHORT).show()
-                } else {
-                    val searchTerm = s.toString()
-                    searchInProg?.cancel()
-                    searchInProg = object : TimerTask() {
-                        override fun run() {
-                            search(searchTerm)
-                        }
+                val searchTerm = s.toString()
+                searchInProg?.cancel()
+                searchInProg = object : TimerTask() {
+                    override fun run() {
+                        search(searchTerm)
                     }
-
-                    timer.schedule(searchInProg, 2000)
                 }
+
+                timer.schedule(searchInProg, 2000)
             }
         })
 
@@ -232,12 +250,13 @@ class SearchFragment : Fragment() {
             }
             btn.onClick(addToList)
         }
+
+        // make sure to hide the search results section until it is populated with correct data
+        view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.GONE
     }
 
-    override fun onStop() {
-        super.onStop()
-
-        view?.findViewById<LinearLayout>(R.id.searchResultsHolder)?.visibility = View.GONE
+    override fun onPause() {
+        super.onPause()
     }
 
     private fun toggleFilters() {

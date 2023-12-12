@@ -1,7 +1,6 @@
 package edu.uw.ischool.mwoode.filmtrackers
 
 
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -60,13 +59,7 @@ data class UserMovieData(
 
 class MovieHistoryFragment : Fragment() {
 
-
     private var movieIdParam: Int? = null
-    private lateinit var titleTextView: TextView
-    private lateinit var ratingTextView: TextView
-    private lateinit var descriptionTextView: TextView
-    private lateinit var imagePoster: ImageView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,19 +86,19 @@ class MovieHistoryFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_movie_history, container, false)
 
-        // Clear existing views
-//        view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
+//        view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.GONE
 
         // display all movies
         readUserMovieData(requireActivity().filesDir.path + "/user_movie_data.json")?.let { userMovieDataList ->
             for (movieInfo in userMovieDataList) {
+                view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
                 updateMovie(movieInfo)
             }
         }
         return view
     }
 
-    
+
 
     private fun updateMovie(movieInfo: UserMovieData) {
         val movieId = movieInfo.movieId
@@ -138,29 +131,14 @@ class MovieHistoryFragment : Fragment() {
                 Log.i(TAG, "response: $movieData")
 
 
-//                 get img from api
-//                val movieImgRequest = Request.Builder()
-//                    .url("$IMG_BASE_URL/${movieData["poster_path"]}")
-//                    .get()
-//                    .addHeader("accept", "application/json")
-//                    .addHeader("Authorization", "Bearer $BEARER_TOKEN")
-//                    .build()
-//
-//
-//                val movieImgResponse = client.newCall(movieImgRequest).execute()
-//                val bitmap =
-//                    BitmapFactory.decodeStream(movieImgResponse.body()?.source()?.inputStream())
-
-
                 // fetch data
                 val backdropPath = movieData.getString("poster_path")
 
 
                 // Display movie information in UI
                 activity?.runOnUiThread {
-//                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
+                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
 //                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.GONE
-
 
                     val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
 
@@ -172,8 +150,6 @@ class MovieHistoryFragment : Fragment() {
                             }
                         }
                     }
-
-                    
 
                     val historyFragment = MovieList.newInstance(
                         movieData.getString("title"),
@@ -189,7 +165,6 @@ class MovieHistoryFragment : Fragment() {
                     val transaction = fragmentManager.beginTransaction()
 //                    val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
 
-
                     if (!fragmentManager.isStateSaved) {
                         transaction.add(R.id.movieListHolder, historyFragment)
 
@@ -199,13 +174,13 @@ class MovieHistoryFragment : Fragment() {
                         Log.w(TAG, "Fragment state is saved. Fragment transaction not committed.")
                     }
 
-//                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.VISIBLE
+                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.VISIBLE
                 }
             }
         }
     }
 
-
+    
 
     private fun readUserMovieData(filePath: String): List<UserMovieData>? {
         try {

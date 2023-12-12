@@ -79,25 +79,21 @@ class AddMovieFragment : Fragment() {
 
         updateMovieCard()
 
+        // maintain state on page if user navigates back to this add movie page
+        if (userLikedMovie != "") {
+            when (userLikedMovie) {
+                "true" -> likeMovie()
+                "false" -> unlikeMovie()
+            }
+        }
+
         // setup interactive components
         thumbsUpToggle.setOnClickListener {
-            userLikedMovie = "true"
-
-            thumbsUpToggle.setCompoundDrawablesWithIntrinsicBounds(null,
-                context?.resources?.getDrawable(R.drawable.like_selected), null, null)
-            thumbsDownToggle.setCompoundDrawablesWithIntrinsicBounds(null,
-                context?.resources?.getDrawable(R.drawable.dislike_unselected), null, null)
-            thumbsDownToggle.isChecked = false
+            likeMovie()
         }
 
         thumbsDownToggle.setOnClickListener {
-            userLikedMovie = "false"
-
-            thumbsDownToggle.setCompoundDrawablesWithIntrinsicBounds(null,
-                context?.resources?.getDrawable(R.drawable.dislike_selected), null, null)
-            thumbsUpToggle.setCompoundDrawablesWithIntrinsicBounds(null,
-                context?.resources?.getDrawable(R.drawable.like_unselected), null, null)
-            thumbsUpToggle.isChecked = false
+            unlikeMovie()
         }
 
         dateWatchedEditText.setOnClickListener {
@@ -131,6 +127,26 @@ class AddMovieFragment : Fragment() {
                 bottomNavigationView?.selectedItemId = R.id.userHistory
             }
         }
+    }
+
+    private fun likeMovie() {
+        userLikedMovie = "true"
+
+        thumbsUpToggle.setCompoundDrawablesWithIntrinsicBounds(null,
+            context?.resources?.getDrawable(R.drawable.like_selected), null, null)
+        thumbsDownToggle.setCompoundDrawablesWithIntrinsicBounds(null,
+            context?.resources?.getDrawable(R.drawable.dislike_unselected), null, null)
+        thumbsDownToggle.isChecked = false
+    }
+
+    private fun unlikeMovie() {
+        userLikedMovie = "false"
+
+        thumbsDownToggle.setCompoundDrawablesWithIntrinsicBounds(null,
+            context?.resources?.getDrawable(R.drawable.dislike_selected), null, null)
+        thumbsUpToggle.setCompoundDrawablesWithIntrinsicBounds(null,
+            context?.resources?.getDrawable(R.drawable.like_unselected), null, null)
+        thumbsUpToggle.isChecked = false
     }
 
     private fun updateMovieCard() {

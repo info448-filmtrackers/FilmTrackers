@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/userHistory"
         android:icon="@drawable/bookmark"
-        android:title="User History" />
+        android:title="Movie History" />
 
     <!--  Dummy navbar item used for certain pages when we want unselected navbar
           e.g. add movie page, detailed movie page -->

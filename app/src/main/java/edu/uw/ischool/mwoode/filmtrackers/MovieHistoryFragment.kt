@@ -94,7 +94,7 @@ class MovieHistoryFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_movie_history, container, false)
 
         // Clear existing views
-        view.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
+//        view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
 
         // display all movies
         readUserMovieData(requireActivity().filesDir.path + "/user_movie_data.json")?.let { userMovieDataList ->
@@ -105,11 +105,11 @@ class MovieHistoryFragment : Fragment() {
         return view
     }
 
-
-
+    
 
     private fun updateMovie(movieInfo: UserMovieData) {
         val movieId = movieInfo.movieId
+        view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
 
         if (!isOnline()) {
             Toast.makeText(
@@ -138,7 +138,7 @@ class MovieHistoryFragment : Fragment() {
                 Log.i(TAG, "response: $movieData")
 
 
-                // get img from api
+//                 get img from api
 //                val movieImgRequest = Request.Builder()
 //                    .url("$IMG_BASE_URL/${movieData["poster_path"]}")
 //                    .get()
@@ -161,6 +161,20 @@ class MovieHistoryFragment : Fragment() {
 //                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
 //                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.GONE
 
+
+                    val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
+
+                    if (movieListHolder != null) {
+                        for (i in 0 until movieListHolder.childCount) {
+                            val movie = childFragmentManager.findFragmentByTag("search_result_$i")
+                            if (movie != null) {
+                                childFragmentManager.beginTransaction().remove(movie).commit()
+                            }
+                        }
+                    }
+
+                    
+
                     val historyFragment = MovieList.newInstance(
                         movieData.getString("title"),
                         movieData.getString("overview"),
@@ -173,6 +187,8 @@ class MovieHistoryFragment : Fragment() {
                     )
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
+//                    val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
+
 
                     if (!fragmentManager.isStateSaved) {
                         transaction.add(R.id.movieListHolder, historyFragment)

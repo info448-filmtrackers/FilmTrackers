@@ -91,7 +91,6 @@ class MovieHistoryFragment : Fragment() {
         // display all movies
         readUserMovieData(requireActivity().filesDir.path + "/user_movie_data.json")?.let { userMovieDataList ->
             for (movieInfo in userMovieDataList) {
-                view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
                 updateMovie(movieInfo)
             }
         }
@@ -99,10 +98,8 @@ class MovieHistoryFragment : Fragment() {
     }
 
 
-
     private fun updateMovie(movieInfo: UserMovieData) {
         val movieId = movieInfo.movieId
-        view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
 
         if (!isOnline()) {
             Toast.makeText(
@@ -142,14 +139,14 @@ class MovieHistoryFragment : Fragment() {
 
                     val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
 
-                    if (movieListHolder != null) {
-                        for (i in 0 until movieListHolder.childCount) {
-                            val movie = childFragmentManager.findFragmentByTag("search_result_$i")
-                            if (movie != null) {
-                                childFragmentManager.beginTransaction().remove(movie).commit()
-                            }
-                        }
-                    }
+//                    if (movieListHolder != null) {
+//                        for (i in 0 until movieListHolder.childCount) {
+//                            val movie = childFragmentManager.findFragmentByTag("search_result_$i")
+//                            if (movie != null) {
+//                                childFragmentManager.beginTransaction().remove(movie).commit()
+//                            }
+//                        }
+//                    }
 
                     val historyFragment = MovieList.newInstance(
                         movieData.getString("title"),
@@ -180,7 +177,7 @@ class MovieHistoryFragment : Fragment() {
         }
     }
 
-    
+
 
     private fun readUserMovieData(filePath: String): List<UserMovieData>? {
         try {

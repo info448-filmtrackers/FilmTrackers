@@ -139,14 +139,14 @@ class MovieHistoryFragment : Fragment() {
 
                     val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
 
-//                    if (movieListHolder != null) {
-//                        for (i in 0 until movieListHolder.childCount) {
-//                            val movie = childFragmentManager.findFragmentByTag("search_result_$i")
-//                            if (movie != null) {
-//                                childFragmentManager.beginTransaction().remove(movie).commit()
-//                            }
-//                        }
-//                    }
+                    if (movieListHolder != null) {
+                        for (i in 0 until movieListHolder.childCount) {
+                            val movie = childFragmentManager.findFragmentByTag("movie_list_$i")
+                            if (movie != null) {
+                                childFragmentManager.beginTransaction().remove(movie).commit()
+                            }
+                        }
+                    }
 
                     val historyFragment = MovieList.newInstance(
                         movieData.getString("title"),
@@ -160,18 +160,15 @@ class MovieHistoryFragment : Fragment() {
                     )
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
-//                    val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
 
                     if (!fragmentManager.isStateSaved) {
-                        transaction.add(R.id.movieListHolder, historyFragment)
+                        transaction.add(R.id.movieListHolder, historyFragment, "movie_list_current")
 
                         // Commit the transaction only if the state is not saved
                         transaction.commit()
                     } else {
                         Log.w(TAG, "Fragment state is saved. Fragment transaction not committed.")
                     }
-
-                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.VISIBLE
                 }
             }
         }
@@ -222,5 +219,3 @@ class MovieHistoryFragment : Fragment() {
         }
     }
 }
-
-

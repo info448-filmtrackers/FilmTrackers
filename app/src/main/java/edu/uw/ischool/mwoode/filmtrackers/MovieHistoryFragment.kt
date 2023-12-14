@@ -6,44 +6,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.app.DatePickerDialog
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import android.widget.ToggleButton
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.FileReader
-import java.io.FileWriter
-import android.graphics.Bitmap
-import java.util.Calendar
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-import android.annotation.SuppressLint
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.ImageSpan
 import android.widget.LinearLayout
-import edu.uw.ischool.mwoode.filmtrackers.UserMovieData
 
 
 private const val TAG = "MovieHistoryFragment"
@@ -59,31 +36,44 @@ data class UserMovieData(
 
 class MovieHistoryFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_movie_history, container, false)
+        return inflater.inflate(R.layout.fragment_movie_history, container, false)
+    }
 
-//        view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.GONE
+    override fun onResume() {
+        super.onResume()
+
+        updatePage()
+    }
+
+    private fun updatePage() {
+        val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
+        if (movieListHolder != null) {
+            Log.i(TAG, "movie list holder: $movieListHolder, with children count: ${movieListHolder.childCount}")
+            for (i in 0 until movieListHolder.childCount) {
+                val movie = childFragmentManager.findFragmentByTag("movie_list_$i")
+                Log.i(TAG, "current movie: $movie")
+                if (movie != null) {
+                    Log.i(TAG, "removing movie $movie")
+                    childFragmentManager.beginTransaction().remove(movie).commit()
+                }
+            }
+        }
 
         // display all movies
         readUserMovieData(requireActivity().filesDir.path + "/user_movie_data.json")?.let { userMovieDataList ->
-            Log.i("FILME", userMovieDataList.toString())
-            for (movieInfo in userMovieDataList) {
-                updateMovie(movieInfo)
+            Log.i(TAG, "user movie data: $userMovieDataList")
+            for (i in userMovieDataList.indices) {
+                updateMovie(userMovieDataList[i], i)
             }
         }
-        return view
     }
 
 
-    private fun updateMovie(movieInfo: UserMovieData) {
+    private fun updateMovie(movieInfo: UserMovieData, currMovie: Int) {
         val movieId = movieInfo.movieId
 
         if (!isOnline()) {
@@ -119,20 +109,6 @@ class MovieHistoryFragment : Fragment() {
 
                 // Display movie information in UI
                 activity?.runOnUiThread {
-                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.removeAllViews()
-//                    view?.findViewById<LinearLayout>(R.id.movieListHolder)?.visibility = View.GONE
-
-                    val movieListHolder = view?.findViewById<LinearLayout>(R.id.movieListHolder)
-
-                    if (movieListHolder != null) {
-                        for (i in 0 until movieListHolder.childCount) {
-                            val movie = childFragmentManager.findFragmentByTag("movie_list_$i")
-                            if (movie != null) {
-                                childFragmentManager.beginTransaction().remove(movie).commit()
-                            }
-                        }
-                    }
-
                     val historyFragment = MovieList.newInstance(
                         movieData.getString("title"),
                         movieData.getString("overview"),
@@ -146,13 +122,10 @@ class MovieHistoryFragment : Fragment() {
                     val fragmentManager = childFragmentManager
                     val transaction = fragmentManager.beginTransaction()
 
-                    if (!fragmentManager.isStateSaved) {
-                        transaction.add(R.id.movieListHolder, historyFragment, "movie_list_current")
-
-                        // Commit the transaction only if the state is not saved
+                    if (isAdded) {
+                        Log.i(TAG, "adding movie: $historyFragment with tag ${"movie_list_$currMovie"}")
+                        transaction.add(R.id.movieListHolder, historyFragment, "movie_list_$currMovie")
                         transaction.commit()
-                    } else {
-                        Log.w(TAG, "Fragment state is saved. Fragment transaction not committed.")
                     }
                 }
             }

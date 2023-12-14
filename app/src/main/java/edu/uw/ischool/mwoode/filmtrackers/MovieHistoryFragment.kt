@@ -59,24 +59,8 @@ data class UserMovieData(
 
 class MovieHistoryFragment : Fragment() {
 
-    private var movieIdParam: Int? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Check if movieIdParam is present in the arguments
-        movieIdParam = arguments?.getInt(MOVIE_ID_PARAM)
-
-        if (movieIdParam == null) {
-            val filePath = requireActivity().filesDir.path + "/user_movie_data.json"
-            readUserMovieData(filePath)?.let { userMovieDataList ->
-                // Set movieIdParam to the movieId from the first object in the array
-                movieIdParam = userMovieDataList.firstOrNull()?.movieId
-
-                // If movieIdParam is still null, set it to a default value (e.g., 221)
-                movieIdParam = movieIdParam ?: 388
-            }
-        }
     }
 
 
@@ -90,6 +74,7 @@ class MovieHistoryFragment : Fragment() {
 
         // display all movies
         readUserMovieData(requireActivity().filesDir.path + "/user_movie_data.json")?.let { userMovieDataList ->
+            Log.i("FILME", userMovieDataList.toString())
             for (movieInfo in userMovieDataList) {
                 updateMovie(movieInfo)
             }
